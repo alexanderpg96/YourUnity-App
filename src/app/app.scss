@@ -14,3 +14,12 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.swiper-pagination-bullet-active {
+    background: map-get($colors, primary) !important;
+}
+
+.toolbar {
+    min-height: 60px;
+    background-image: none;
+}

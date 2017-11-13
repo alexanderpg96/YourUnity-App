@@ -7,6 +7,8 @@ import { Config, Nav, Platform } from 'ionic-angular';
 import { FirstRunPage } from '../pages/pages';
 import { Settings } from '../providers/providers';
 
+import firebase from 'firebase';
+
 @Component({
   template: `<ion-menu [content]="content">
     <ion-header>
@@ -53,6 +55,15 @@ export class MyApp {
       this.splashScreen.hide();
     });
     this.initTranslate();
+
+    firebase.initializeApp({
+      apiKey: "AIzaSyAyhMgGXfntwIaSUGk2HUynuMzBw3IZcdg",
+      authDomain: "yourunity-9123d.firebaseapp.com",
+      databaseURL: "https://yourunity-9123d.firebaseio.com",
+      projectId: "yourunity-9123d",
+      storageBucket: "yourunity-9123d.appspot.com",
+      messagingSenderId: "43544297169"
+    });
   }
 
   initTranslate() {

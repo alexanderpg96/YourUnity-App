@@ -5,6 +5,8 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 
+import firebase from "firebase";
+
 @IonicPage()
 @Component({
   selector: 'page-signup',
@@ -34,20 +36,37 @@ export class SignupPage {
   }
 
   doSignup() {
-    // Attempt to login in through our User service
-    this.user.signup(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
+    // Attempt to register through Firebase
 
-      this.navCtrl.push(MainPage);
+    var errorBool = false;
 
-      // Unable to sign up
-      let toast = this.toastCtrl.create({
-        message: this.signupErrorString,
-        duration: 3000,
-        position: 'top'
+      firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
+        // Handle Errors here.
+        errorBool = true;
+  
+        alert(error.code + error.message);
+
       });
-      toast.present();
-    });
+
+      firebase.auth().onAuthStateChanged(user => {
+        if(user) {
+          this.navCtrl.push(MainPage);
+        }
+      });
+
+    // this.user.signup(this.account).subscribe((resp) => {
+    //   // this.navCtrl.push(MainPage);
+    // }, (err) => {
+
+    //   this.navCtrl.push(MainPage);
+
+    //   // Unable to sign up
+    //   let toast = this.toastCtrl.create({
+    //     message: this.signupErrorString,
+    //     duration: 3000,
+    //     position: 'top'
+    //   });
+    //   toast.present();
+    // });
   }
 }

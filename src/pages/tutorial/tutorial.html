@@ -1,7 +1,7 @@
-<ion-header no-shadow>
+<ion-header no-shadow no-border>
   <ion-navbar>
     <ion-buttons end *ngIf="showSkip">
-      <button ion-button (click)="startApp()" color="primary">{{ 'TUTORIAL_SKIP_BUTTON' | translate}}</button>
+      <button ion-button (click)="startApp()" color="primary" class="skip-button">{{ 'TUTORIAL_SKIP_BUTTON' | translate}}</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>

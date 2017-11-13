@@ -26,11 +26,16 @@ page-tutorial {
     padding: 0 40px;
     font-size: 14px;
     line-height: 1.5;
-    color: #60646B;
+    color: #f4f4f4;
 
     b {
-      color: #000000;
+      color: #efefef;
+      font-weight: 800;
     }
+  }
+
+  .skip-button {
+    margin-right: 7px;
   }
 
 }

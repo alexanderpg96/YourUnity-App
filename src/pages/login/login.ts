@@ -5,6 +5,8 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 
+import firebase from 'firebase';
+
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -34,17 +36,32 @@ export class LoginPage {
 
   // Attempt to login in through our User service
   doLogin() {
-    this.user.login(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
-      this.navCtrl.push(MainPage);
-      // Unable to log in
-      let toast = this.toastCtrl.create({
-        message: this.loginErrorString,
-        duration: 3000,
-        position: 'top'
-      });
-      toast.present();
+
+    firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      alert(errorCode + ": " + errorMessage)
     });
+
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) {
+        this.navCtrl.push(MainPage);
+      }
+    });
+
+    // this.user.login(this.account).subscribe((resp) => {
+    //   this.navCtrl.push(MainPage);
+    // }, (err) => {
+    //   this.navCtrl.push(MainPage);
+    //   // Unable to log in
+    //   let toast = this.toastCtrl.create({
+    //     message: this.loginErrorString,
+    //     duration: 3000,
+    //     position: 'top'
+    //   });
+    //   toast.present();
+    // });
   }
 }
