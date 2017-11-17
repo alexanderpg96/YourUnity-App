@@ -1,0 +1,48 @@
+<ion-header no-shadow no-border>
+
+  <!-- <ion-navbar>
+    <div class="center larger bold">{{ 'CARDS_TITLE' | translate }}</div>
+  </ion-navbar> -->
+
+</ion-header>
+
+
+<ion-content>
+    <ion-card *ngFor="let item of cardItems" class="collapse-container">
+
+      <ion-item class="no-overflow">
+        <!-- <ion-avatar item-start>
+          <img [src]="item.user.avatar">
+        </ion-avatar> -->
+        <h1>{{item.event.name}}</h1>
+        <p class="organization">{{item.organization}}</p>
+        <p class="time">{{item.time}}</p>
+      </ion-item>
+
+      <div class="collapse-body">
+
+        <!-- <img [src]="item.cat_image"> -->
+      
+      </div>
+
+      <ion-row>
+        <ion-col class="col-border">
+          <button ion-button color="light" clear small icon-start class="override-button">
+              <!-- <ion-icon name='thumbs-up'></ion-icon> -->
+              <ion-icon name='leaf'></ion-icon>
+            </button>
+        </ion-col>
+        <ion-col class="col-border">
+          <button ion-button color="light" clear small icon-start center class="override-button">
+              <!-- <ion-icon name='text'></ion-icon> -->
+              <div class="center"><ion-icon name='calendar'></ion-icon>05 Nov</div>
+            </button>
+        </ion-col>
+        <ion-col class="col-border">
+            <button ion-button color="light" clear small icon-start center class="override-button">
+                <div class="center"><ion-icon name='pin'></ion-icon>1.7 mi</div>
+            </button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+</ion-content>

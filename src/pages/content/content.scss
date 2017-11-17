@@ -1,3 +1,51 @@
 page-home {
 
 }
+
+.white-card {
+    background-color: #fff !important;
+}
+
+// Gives a little white space at the top to make the chart look better
+.space {
+    background: #fff !important;
+    padding-top: 30px;
+}
+
+// Formatting for the h3 titles inside chart circles
+.hours-events {
+    color: $text-color !important;
+    font-size: 2.7rem !important;
+    padding: 20px;
+}
+
+.settings {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: $text-color;
+    font-size: 2.5rem;
+}
+
+.progress {
+    width: 100% !important;
+    margin-top: 0px;
+    padding: 0;
+    background-color: #fff;
+    padding-bottom: 1px;
+}
+
+.progress img {
+    width: 100% !important;
+}
+
+// Teal vertical dividing line
+.divide {
+    border-right: 1px solid #6bbaa7;
+}
+
+// Top and bottom padding for the stat card
+.tb-padding {
+    padding-top: 13px;
+    padding-bottom: 13px;
+}

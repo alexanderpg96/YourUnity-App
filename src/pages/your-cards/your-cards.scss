@@ -1,6 +1,25 @@
-page-cards {
+page-your-cards {
 
 }
+
+// Collapse and expand of cards
+
+.collapse-container {
+
+}
+
+.collapse-body {
+    height: 0px;
+    overflow: hidden;
+    transition: height 0.5s;
+    background: url(http://placekitten.com/g/600/300);
+    color: #FFF;
+}
+
+.open {
+    height: 300px;
+}
+
 
 .toolbar {
     background-color: #3f3f3f !important;
@@ -36,20 +55,19 @@ h2 {
     margin-top: 20px !important;
 }
 
-.col {
+.col-border {
     text-align: center;
     padding: 0 !important;
     margin: 0 !important;
+    border-right: 1px solid #fff;
     padding-top: 0px !important;
     padding-bottom: 0px !important;
+    margin-top: 7px !important;
+    margin-bottom: 7px !important;
 }
 
 .override-button {
     height: 30px !important;
-}
-
-.col:last-of-type {
-    border-right: none;
 }
 
 .no-overflow {

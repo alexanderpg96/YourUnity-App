@@ -1,2 +1,32 @@
 page-login {
+    padding-top: 5%;
+}
+
+.login-form {
+    margin-top: 10%;
+}
+
+.input-field {
+    font-size: 1.6rem;
+    margin-bottom: 7%;
+}
+
+.input-field ion-input {
+    background-color: #dedede!important;
+    width: 90%;
+    margin-left: 5%;
+    border-radius: 4px;
+}
+
+.input-field ion-label {
+    margin-left: 6%;
+    font-weight: 500;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.button {
+    height: 52px !important;
+    font-weight: 400;
+    font-size: 1.6rem;
 }

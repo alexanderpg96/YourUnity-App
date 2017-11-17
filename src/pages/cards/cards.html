@@ -1,8 +1,8 @@
-<ion-header>
+<ion-header no-shadow no-border>
 
-  <ion-navbar>
-    <ion-title>{{ 'CARDS_TITLE' | translate }}</ion-title>
-  </ion-navbar>
+  <!-- <ion-navbar>
+    <div class="center larger bold">{{ 'CARDS_TITLE' | translate }}</div>
+  </ion-navbar> -->
 
 </ion-header>
 
@@ -11,37 +11,34 @@
 
   <ion-card *ngFor="let item of cardItems">
 
-    <ion-item>
-      <ion-avatar item-start>
+    <ion-item class="no-overflow">
+      <!-- <ion-avatar item-start>
         <img [src]="item.user.avatar">
-      </ion-avatar>
-      <h2>{{item.user.name}}</h2>
-      <p>{{item.date}}</p>
+      </ion-avatar> -->
+      <h1>{{item.event.name}}</h1>
+      <p class="organization">{{item.organization}}</p>
+      <p class="time">{{item.time}}</p>
     </ion-item>
 
-    <img [src]="item.image">
-
-    <ion-card-content>
-      <p>{{item.content}}</p>
-    </ion-card-content>
+    <!-- <img [src]="item.cat_image"> -->
 
     <ion-row>
-      <ion-col>
-        <button ion-button color="primary" clear small icon-start>
-            <ion-icon name='thumbs-up'></ion-icon>
-            12 Likes
+      <ion-col class="col-border">
+        <button ion-button color="light" clear small icon-start class="override-button">
+            <!-- <ion-icon name='thumbs-up'></ion-icon> -->
+            <ion-icon name='leaf'></ion-icon>
           </button>
       </ion-col>
-      <ion-col>
-        <button ion-button color="primary" clear small icon-start>
-            <ion-icon name='text'></ion-icon>
-            4 Comments
+      <ion-col class="col-border">
+        <button ion-button color="light" clear small icon-start center class="override-button">
+            <!-- <ion-icon name='text'></ion-icon> -->
+            <div class="center"><ion-icon name='calendar'></ion-icon>05 Nov</div>
           </button>
       </ion-col>
-      <ion-col center text-center>
-        <ion-note>
-          11h ago
-        </ion-note>
+      <ion-col class="col-border">
+          <button ion-button color="light" clear small icon-start center class="override-button">
+              <div class="center"><ion-icon name='pin'></ion-icon>1.7 mi</div>
+          </button>
       </ion-col>
     </ion-row>
   </ion-card>
