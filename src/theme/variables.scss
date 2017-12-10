@@ -15,7 +15,7 @@ $font-path: "../assets/fonts";
 $text-color:        #2e2e2e;
 $background-color:  #efefef;
 
-$toolbar-md-background: #fff;
+$toolbar-md-background: #efefef;
 $tabbar-md-background: #fff;
 
 
@@ -29,7 +29,7 @@ $tabbar-md-background: #fff;
 
 $colors: (
   primary:    #6bbaa7,
-  secondary:  #32db64,
+  secondary:  #317ee2,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #2e2e2e
@@ -69,6 +69,15 @@ $colors: (
 h1 {
   color: $text-color !important;
   font-weight: 500 !important;
+}
+
+h2 {
+  font-size: 1.9rem !important;
+  font-weight: 300 !important;
+}
+
+p {
+  font-size: 1.6rem !important;
 }
 
 .tabbar {
@@ -113,7 +122,7 @@ h1 {
 
 // Thins out text weight
 .thin {
-  font-weight: 200;
+  font-weight: 200 !important;
 }
 
 // Changes text color to dark color

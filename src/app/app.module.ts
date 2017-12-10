@@ -8,12 +8,29 @@ import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { HttpModule } from '@angular/http';
 
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
 import { User } from '../providers/providers';
 import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
+
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+
+
+// Gesture support
+export class MyHammerConfig extends HammerGestureConfig  {
+  overrides = <any>{
+      // override hammerjs default configuration
+      'pan': {threshold: 5},
+      'swipe': {
+           velocity: 0.4,
+           threshold: 20,
+           direction: 31 // /!\ ugly hack to allow swipe in all direction
+      }
+  }
+}
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -43,6 +60,7 @@ export function provideSettings(storage: Storage) {
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -50,7 +68,10 @@ export function provideSettings(storage: Storage) {
         deps: [HttpClient]
       }
     }),
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      tabsHideOnSubPages: true,
+      //statusBarPadding: false,
+    }),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -66,7 +87,11 @@ export function provideSettings(storage: Storage) {
     StatusBar,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    {
+      provide: HAMMER_GESTURE_CONFIG, 
+      useClass: MyHammerConfig 
+    }
   ]
 })
 export class AppModule { }

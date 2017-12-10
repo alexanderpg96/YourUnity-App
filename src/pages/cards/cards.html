@@ -11,11 +11,11 @@
 
   <ion-card *ngFor="let item of cardItems">
 
-    <ion-item class="no-overflow">
+    <ion-item class="no-overflow" (click)="openEvent(item)">
       <!-- <ion-avatar item-start>
         <img [src]="item.user.avatar">
       </ion-avatar> -->
-      <h1>{{item.event.name}}</h1>
+      <h1>{{item.name}}</h1>
       <p class="organization">{{item.organization}}</p>
       <p class="time">{{item.time}}</p>
     </ion-item>

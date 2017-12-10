@@ -2,6 +2,10 @@ page-home {
 
 }
 
+.white-card:first-of-type {
+    margin-top: 45px !important;
+}
+
 .white-card {
     background-color: #fff !important;
 }
@@ -9,7 +13,6 @@ page-home {
 // Gives a little white space at the top to make the chart look better
 .space {
     background: #fff !important;
-    padding-top: 30px;
 }
 
 // Formatting for the h3 titles inside chart circles
@@ -20,18 +23,16 @@ page-home {
 }
 
 .settings {
-    position: absolute;
-    top: 15px;
-    right: 15px;
     color: $text-color;
     font-size: 2.5rem;
+    float: right;
+    margin-right: 25px;
+    margin-top: 23px;
 }
 
 .progress {
     width: 100% !important;
-    margin-top: 0px;
     padding: 0;
-    background-color: #fff;
     padding-bottom: 1px;
 }
 
@@ -48,4 +49,9 @@ page-home {
 .tb-padding {
     padding-top: 13px;
     padding-bottom: 13px;
+}
+
+.name {
+    font-size: 2.7rem !important;
+    margin-bottom: 20px !important;
 }

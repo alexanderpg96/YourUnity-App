@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 
 @IonicPage()
 @Component({
@@ -8,13 +10,15 @@ import { IonicPage, NavController } from 'ionic-angular';
 })
 export class YourCardsPage {
   cardItems: any[];
+  cardState = true;
+  buttonState = true;
+  isInEnabled = true;
+  isOutEnabled = false;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public http: Http) {
     this.cardItems = [
       {
-        event: {
-          name: 'Mission Beach Clean Up',
-        },
+        name: 'Mission Beach Clean Up',
         organization: 'San Diego Parks and Recreation',
         time: '8:00 AM - 12:00 PM',
         cat_image: 'assets/img/splashbg.jpg',
@@ -22,5 +26,11 @@ export class YourCardsPage {
       }
     ];
 
+    this.http.get('https://yourunity-dev.dev/api/events').map(res => res.json()).subscribe(data => {
+      this.cardItems = data;
+      console.log(this.cardItems);
+    })
+
   }
+
 }
