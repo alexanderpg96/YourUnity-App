@@ -26,7 +26,7 @@ page-your-cards {
 
     .open {
         height: 90px;
-        background: #fcfcfc;
+        background: #2e2e2e;
         transition: 0.2s;
         width: 100%;
         padding: 10px;
@@ -67,17 +67,17 @@ page-your-cards {
     }
 
     .organization {
-        color: #2e2e2e !important;
+        color: #efefef !important;
         font-size: 1.9rem !important;
     }
 
     .time {
-        color: #2e2e2e !important;
+        color: #efefef !important;
         font-size: 1.7rem !important;
     }
 
     .item {
-        background-color: #fcfcfc;
+        background-color: #2e2e2e;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }

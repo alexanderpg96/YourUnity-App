@@ -12,11 +12,11 @@ $font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        #2e2e2e;
-$background-color:  #efefef;
+$text-color:        #efefef;
+$background-color:  #3f3f3f;
 
-$toolbar-md-background: #efefef;
-$tabbar-md-background: #fff;
+$toolbar-md-background: #3f3f3f;
+$tabbar-md-background: #3f3f3f;
 
 
 // Named Color Variables
@@ -66,6 +66,14 @@ $colors: (
 
 @import "ionic.theme.default";
 
+.tabs {
+  background-color: $background-color !important;
+}
+
+.tabs-ios {
+  background: $background-color !important;
+}
+
 h1 {
   color: $text-color !important;
   font-weight: 500 !important;
@@ -93,7 +101,7 @@ p {
 }
 
 .tab-button-icon {
-  color: #2e2e2e !important;
+  color: #fefefe !important;
 }
 
 // Centers items horizontally

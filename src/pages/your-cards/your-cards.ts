@@ -16,21 +16,27 @@ export class YourCardsPage {
   isOutEnabled = false;
 
   constructor(public navCtrl: NavController, public http: Http) {
-    this.cardItems = [
-      {
-        name: 'Mission Beach Clean Up',
-        organization: 'San Diego Parks and Recreation',
-        time: '8:00 AM - 12:00 PM',
-        cat_image: 'assets/img/splashbg.jpg',
-        content: 'San Diego beaches are beautiful and clean. Let us keep them that way',
-      }
-    ];
-
     this.http.get('https://yourunity-dev.dev/api/events').map(res => res.json()).subscribe(data => {
       this.cardItems = data;
+      
+      for(var i = 0; i < this.cardItems.length; i++) {
+        var obj = this.cardItems[i];
+        obj['cardState'] = true;
+      }
+
       console.log(this.cardItems);
     })
 
+    // $('.card').click(function() {
+    //   $('.card').toggleClass('open');
+    //   console.log('clicked');
+    // });
+  }
+
+  card_tapped() {
+    console.log("Hello! Clicked" + this);
+    var element = document.getElementsByClassName('card');
+    element[0].classList.toggle('open');
   }
 
 }
