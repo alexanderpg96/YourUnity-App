@@ -10,7 +10,7 @@ page-your-cards {
         height: 0px;
         overflow: hidden;
         transition: 0.2s;
-        background: #fcfcfc;
+        background: #2e2e2e;
         display: flex;
     }
 
@@ -32,6 +32,16 @@ page-your-cards {
         padding: 10px;
         display: flex;
         opacity: 1;
+    }
+
+    .open .checkin {
+        opacity: 1;
+        transition: 0s;
+    }
+
+    .open .checkout {
+        opacity: 1;
+        transition: 0s;
     }
 
     .activeButton {

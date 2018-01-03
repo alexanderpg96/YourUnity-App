@@ -2,6 +2,12 @@
   "name": "YourUnityApp",
   "app_id": "",
   "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "https://yourunity-dev.dev/api"
+    }
+  ],
   "integrations": {
     "cordova": {}
   }

@@ -37,24 +37,23 @@ export class LoginPage {
   // Attempt to login in through our User service
   doLogin() {
 
-    // firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
-    //   // Handle Errors here.
-    //   var errorCode = error.code;
-    //   var errorMessage = error.message;
+    firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
 
-    //   //alert(errorCode + ": " + errorMessage)
-    // });
+      //alert(errorCode + ": " + errorMessage)
+    });
 
-    // firebase.auth().onAuthStateChanged(user => {
-    //   if(user) {
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) {
         this.navCtrl.push(MainPage);
-    //   }
-    // });
+      }
+    });
 
     // this.user.login(this.account).subscribe((resp) => {
     //   this.navCtrl.push(MainPage);
     // }, (err) => {
-    //   this.navCtrl.push(MainPage);
     //   // Unable to log in
     //   let toast = this.toastCtrl.create({
     //     message: this.loginErrorString,
