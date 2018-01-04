@@ -25,7 +25,6 @@ export class CardsPage {
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
       }
-
     });
   }
 
@@ -39,5 +38,20 @@ export class CardsPage {
 
   isCardOpened(item) {
     return item.eventOpened;
+  }
+
+  doRefresh(refresher) {
+    this.http.get('https://yourunity-dev.dev/api/events').map(res => res.json()).subscribe(data => {
+      this.cardItems = data;
+      
+      for(var i = 0; i < this.cardItems.length; i++) {
+        var item = this.cardItems[i];
+      }
+    });
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 700);
   }
 }

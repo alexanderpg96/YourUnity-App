@@ -9,6 +9,14 @@
 
 <ion-content>
 
+  <ion-refresher (ionRefresh)="doRefresh($event);">
+
+    <ion-refresher-content>
+    
+    </ion-refresher-content>
+    
+  </ion-refresher>
+
   <ion-card *ngFor="let item of cardItems" [ngClass]="{absolute: isCardOpened(item)}">
 
     <ion-item class="no-overflow" (click)="openEvent(item)">
