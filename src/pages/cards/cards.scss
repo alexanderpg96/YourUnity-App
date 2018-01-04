@@ -1,7 +1,64 @@
 page-cards {
 
-    .card:first-of-type {
-        margin-top: 45px !important;
+    // .card:first-of-type {
+    //     margin-top: 45px !important;
+    // }
+
+    .content {
+        padding-top: 45px;
+    }
+
+    .closed {
+        position: relative;
+        height: 0px;
+        overflow: hidden;
+        transition: 0.2s;
+        background: #2e2e2e;
+        display: flex;
+    }
+
+    .absolute {
+        position: absolute;
+        display: flex;
+        flex-flow: column;
+        height: 94%;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        width: 94.5vw;
+        transition: 0.2s;
+    }
+
+    .open {
+        background: #2e2e2e;
+        transition: 0.2s;
+        width: 100%;
+        flex: 1 auto;
+        opacity: 1;
+        padding: 0;
+        overflow-y: scroll;
+        display: block;
+    }
+
+    .open img {
+        height: 250px;
+        width: 100vw;
+    }
+
+    .open p {
+        padding: 10px;
+    }
+
+    .absolute h1 {
+        font-size: 2.8rem !important;
+    }
+
+    .absolute .organization {
+        font-size: 2.2rem !important;
+    }
+
+    .absolute .time {
+        font-size: 2rem !important;
     }
 
     .toolbar {

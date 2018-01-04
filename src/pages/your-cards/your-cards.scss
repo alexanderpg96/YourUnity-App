@@ -4,6 +4,10 @@ page-your-cards {
         margin-top: 45px !important;
     }
 
+    .card {
+        z-index: 999;
+    }
+
     // Collapse and expand of cards
 
     .closed {
@@ -107,6 +111,10 @@ page-your-cards {
         padding-bottom: 0px !important;
         margin-top: 7px !important;
         margin-bottom: 7px !important;
+    }
+
+    .col-border:last-of-type {
+        border-right: 0px;
     }
 
     .override-button {

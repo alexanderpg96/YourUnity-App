@@ -16,7 +16,11 @@ $text-color:        #efefef;
 $background-color:  #3f3f3f;
 
 $toolbar-md-background: #3f3f3f;
-$tabbar-md-background: #3f3f3f;
+$tabbar-md-background: #2e2e2e;
+
+$refresher-icon-color: #efefef;
+$refresher-text-color: #efefef;
+$refresher-border-color: #3f3f3f;
 
 
 // Named Color Variables
@@ -67,11 +71,13 @@ $colors: (
 @import "ionic.theme.default";
 
 .tabs {
-  background-color: $background-color !important;
+  background-color: #2e2e2e !important;
+  z-index: 998 !important;
 }
 
 .tabs-ios {
-  background: $background-color !important;
+  background: #2e2e2e !important;
+  z-index: 998 !important;
 }
 
 h1 {
@@ -89,7 +95,9 @@ p {
 }
 
 .tabbar {
-  background: $background-color !important;
+  background: #2e2e2e !important;
+  z-index: 998 !important;
+  height: 70px;
 }
 
 .tabs-md .tab-button[aria-selected=true] {
@@ -98,10 +106,12 @@ p {
 
 .tabs-md .tab-button[aria-selected=false] {
   color: $text-color !important;
+  z-index: 998 !important;
 }
 
 .tab-button-icon {
   color: #fefefe !important;
+  z-index: 998 !important;
 }
 
 // Centers items horizontally

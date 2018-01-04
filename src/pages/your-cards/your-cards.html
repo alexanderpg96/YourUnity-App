@@ -9,46 +9,57 @@
 
 <ion-content class="content">
 
-    <ion-card *ngFor="let item of cardItems"class="card">
+  <ion-refresher (ionRefresh)="doRefresh($event);">
 
-      <ion-item class="no-overflow" (click)="toggle(item)">
-        <!-- <ion-avatar item-start>
-          <img [src]="item.user.avatar">
-        </ion-avatar> -->
-        <h1>{{item.event_name}}</h1>
-        <p class="organization"><!-- {{item.organization}} -->Organization</p>
-        <p class="time">{{item.starts}}</p>
-      </ion-item>
+    <ion-refresher-content>
 
-      <div class="closed" [ngClass]="{open: isCardOpened(item)}">
+    </ion-refresher-content>
 
-        <button ion-button outline class="checkin" [ngClass]="{activeButton: isCheckin(item)}" 
-        (click)="checkIn(item)" 
-        [disabled]="!isCheckin(item)">Check-in</button>
-        <button ion-button outline class="checkout" [ngClass]="{activeButton : isCheckout(item)}" 
-        (click)="checkOut(item)" 
-        [disabled]="!isCheckout(item)">Check-out</button>
-      
-      </div>
+  </ion-refresher>
 
-      <ion-row>
-        <ion-col class="col-border">
-          <button ion-button color="light" clear small icon-start class="override-button">
-              <!-- <ion-icon name='thumbs-up'></ion-icon> -->
-              <ion-icon name='leaf'></ion-icon>
-            </button>
-        </ion-col>
-        <ion-col class="col-border">
-          <button ion-button color="light" clear small icon-start center class="override-button">
-              <!-- <ion-icon name='text'></ion-icon> -->
-              <div class="center"><ion-icon name='calendar'></ion-icon>05 Nov</div>
-            </button>
-        </ion-col>
-        <ion-col class="col-border">
+      <ion-card *ngFor="let item of cardItems"class="card">
+
+        <ion-item class="no-overflow" (click)="toggle(item)">
+          <!-- <ion-avatar item-start>
+            <img [src]="item.user.avatar">
+          </ion-avatar> -->
+          <h1>{{item.event_name}}</h1>
+          <p class="organization"><!-- {{item.organization}} -->Organization</p>
+          <p class="time">{{item.starts * 1000 | date:'h:mm a'}} - {{item.ends * 1000 | date:'h:mm a'}}</p>
+        </ion-item>
+
+        <div class="closed" [ngClass]="{open: isCardOpened(item)}">
+
+          <button ion-button outline class="checkin" [ngClass]="{activeButton: isCheckin(item)}" 
+          (click)="checkIn(item)" 
+          [disabled]="!isCheckin(item)">Check-in</button>
+          <button ion-button outline class="checkout" [ngClass]="{activeButton : isCheckout(item)}" 
+          (click)="checkOut(item)" 
+          [disabled]="!isCheckout(item)">Check-out</button>
+        
+        </div>
+
+        <ion-row>
+          <ion-col class="col-border">
+            <button ion-button color="light" clear small icon-start class="override-button">
+                <!-- <ion-icon name='thumbs-up'></ion-icon> -->
+                <ion-icon name='leaf'></ion-icon>
+              </button>
+          </ion-col>
+          <ion-col class="col-border">
             <button ion-button color="light" clear small icon-start center class="override-button">
-                <div class="center"><ion-icon name='pin'></ion-icon>1.7 mi</div>
-            </button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
+                <!-- <ion-icon name='text'></ion-icon> -->
+                <div class="center"><ion-icon name='calendar'></ion-icon>{{item.starts * 1000 | date:'dd MMM'}}</div>
+              </button>
+          </ion-col>
+          <ion-col class="col-border">
+              <button ion-button color="light" clear small icon-start center class="override-button">
+                  <div class="center"><ion-icon name='pin'></ion-icon>1.7 mi</div>
+              </button>
+          </ion-col>
+
+        </ion-row>
+
+      </ion-card>
+
 </ion-content>

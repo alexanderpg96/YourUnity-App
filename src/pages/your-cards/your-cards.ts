@@ -50,12 +50,47 @@ export class YourCardsPage {
 
       console.log(this.cardItems);
       console.log(this.user.uid);
-    })
+    });
+  }
+
+  doRefresh(refresher) {
+    this.http.get('https://yourunity-dev.dev/api/user_events/' + this.user.uid).map(res => res.json()).subscribe(data => {
+      this.cardItems = data;
+      
+      for(var i = 0; i < this.cardItems.length; i++) {
+        var item = this.cardItems[i];
+
+        // if statement to check if time has started and check status (1 = event started, 2 = not started)
+        if(item.starts <= Math.round((new Date()).getTime() / 1000) && item.ends >= Math.round((new Date()).getTime() / 1000)) {
+          this.storage.get(item.id.toString()).then((val) => {
+            if(val) {
+              item.isInEnabled = false;
+              item.isOutEnabled = true;
+            }
+            else {
+              item.isInEnabled = true;
+              item.isOutEnabled = false;
+            }      
+          });      
+        }
+        else {
+          item.isInEnabled = false;
+          item.isOutEnabled = false;
+        }
+      }
+
+      console.log(this.cardItems);
+      console.log(this.user.uid);
+    });
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 700);
   }
 
   toggle(item) {
     item.opened = !item.opened;
-    console.log(item.opened);
   }
 
   isCardOpened(item) {
