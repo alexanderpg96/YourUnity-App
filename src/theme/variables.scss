@@ -80,6 +80,19 @@ $colors: (
   z-index: 998 !important;
 }
 
+.toolbar-background {
+  background-color: #3f3f3f !important;
+  opacity: 0 !important;
+}
+
+.toolbar {
+  background: #3f3f3f !important;
+}
+
+.toolbar-ios {
+  background: #3f3f3f !important;
+}
+
 h1 {
   color: $text-color !important;
   font-weight: 500 !important;

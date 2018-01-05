@@ -16,6 +16,7 @@ import firebase from 'firebase';
 export class CardsPage {
   cardItems: any[];
   eventOpened: Boolean = false;
+  isRegister: Boolean = true;
   user = firebase.auth().currentUser;
 
   constructor(public navCtrl: NavController, public http: Http, public storage: Storage) {
@@ -24,20 +25,30 @@ export class CardsPage {
       
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
+        item.isRegister = true;
       }
     });
   }
 
   openEvent(item) {
     item.eventOpened = !item.eventOpened;
+    this.eventOpened = !this.eventOpened;
 
     // this.navCtrl.push('EventDetailPage', {
     //   event: event
     // });
   }
 
+  isOpened() {
+    return this.eventOpened;
+  }
+
   isCardOpened(item) {
     return item.eventOpened;
+  }
+
+  canRegister(item) {
+    return item.isRegister;
   }
 
   doRefresh(refresher) {

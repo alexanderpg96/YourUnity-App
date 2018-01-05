@@ -1,37 +1,48 @@
 page-signup {
     padding-top: 5%;
+
+    .signup-form {
+        margin-top: 10%;
+    }
+    
+    .input-field {
+        font-size: 16pt;
+        margin-bottom: 7%;
+    }
+    
+    .input-field ion-input {
+        background-color: #2e2e2e;
+        width: 90%;
+        margin-left: 5%;
+        border-radius: 4px;
+        padding: 7px;
+    }
+    
+    .input-field ion-label {
+        margin-left: 6%;
+        font-weight: 500;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .larger {
+        font-size: 2.8rem;
+        font-weight: 300;
+    }
+    
+    .button {
+        height: 70px !important;
+        font-weight: 400;
+        font-size: 2.4rem;
+    }
+
+    .larger {
+        font-size: 4rem !important;
+    }
+
+    ion-label {
+        font-size: 16pt !important;
+    }
 }
 
-.signup-form {
-    margin-top: 10%;
-}
 
-.input-field {
-    font-size: 1.6rem;
-    margin-bottom: 7%;
-}
-
-.input-field ion-input {
-    background-color: #3f3f3f;
-    width: 90%;
-    margin-left: 5%;
-    border-radius: 4px;
-}
-
-.input-field ion-label {
-    margin-left: 6%;
-    font-weight: 500;
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-}
-
-.larger {
-    font-size: 2.8rem;
-    font-weight: 300;
-}
-
-.button {
-    height: 52px !important;
-    font-weight: 400;
-    font-size: 1.6rem;
-}

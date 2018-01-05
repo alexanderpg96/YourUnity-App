@@ -7,7 +7,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content [ngClass]="{noScroll: isOpened()}">
 
   <ion-refresher (ionRefresh)="doRefresh($event);">
 
@@ -17,8 +17,8 @@
     
   </ion-refresher>
 
-  <ion-card *ngFor="let item of cardItems" [ngClass]="{absolute: isCardOpened(item)}">
-
+  <ion-card class="card" *ngFor="let item of cardItems" [ngClass]="{absolute: isCardOpened(item)}">
+      
     <ion-item class="no-overflow" (click)="openEvent(item)">
       <!-- <ion-avatar item-start>
         <img [src]="item.user.avatar">
@@ -29,7 +29,16 @@
     </ion-item>
 
     <div class="closed" [ngClass]="{open: isCardOpened(item)}">
-    <img src="assets/img/eco.jpg" />
+
+      <div class="registerOverlay">
+
+          <img src="assets/img/eco.jpg" />
+
+          <button ion-button outline class="registerButton" [ngClass]="{activeButton: canRegister(item)}" 
+          (click)="register(item)" 
+          [disabled]="!canRegister(item)">Register</button>
+
+      </div>
 
       <p>{{ item.event_description }}</p>
     </div>

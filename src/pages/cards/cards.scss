@@ -8,6 +8,14 @@ page-cards {
         padding-top: 45px;
     }
 
+    .noScroll .scroll-content {
+        overflow: hidden;
+    }
+
+    .noScroll .card:not(.absolute) {
+        opacity: 0.2;
+    }
+
     .closed {
         position: relative;
         height: 0px;
@@ -18,10 +26,10 @@ page-cards {
     }
 
     .absolute {
-        position: absolute;
+        position: fixed;
         display: flex;
         flex-flow: column;
-        height: 94%;
+        height: 85%;
         top: 0;
         left: 0;
         z-index: 999;
@@ -62,6 +70,16 @@ page-cards {
 
     .absolute .time {
         font-size: 2rem !important;
+    }
+
+    .registerButton {
+        margin-left: 5%;
+        margin-top: 15px;
+        width: 90%;
+        height: 60px !important;
+        color: #efefef;
+        //background: rgba(107, 186, 167, 1);
+        font-size: 2.3rem;
     }
 
     .toolbar {
