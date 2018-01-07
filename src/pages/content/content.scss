@@ -1,57 +1,62 @@
-page-home {
+page-content {
 
-}
+    ion-header {
+        background-color: #2e2e2e;
+        padding: 10px 20px 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #efefef;
+    }
 
-.white-card:first-of-type {
-    margin-top: 45px !important;
-}
+    ion-header h3 {
+        color: #efefef !important;
+        font-weight: 400;
+        font-size: 2.6rem;
+    }
 
-.white-card {
-    background-color: #fff !important;
-}
+    ion-icon {
+        font-size: 4.2rem;
+        float: right;
+        color: #6bbaa7;
+    }
 
-// Gives a little white space at the top to make the chart look better
-.space {
-    background: #fff !important;
-}
+    .card-title {
+        font-size: 3rem !important;
+        font-weight: 200;
+        padding: 10px;
+    }
 
-// Formatting for the h3 titles inside chart circles
-.hours-events {
-    color: $text-color !important;
-    font-size: 2.7rem !important;
-    padding: 20px;
-}
+    .card:first-of-type {
+        margin-top: 15px;
+    }
+    
+    .card {
+        background-color: #2e2e2e !important;
+    }
+    
+    // Gives a little white space at the top to make the chart look better
+    .space {
+        background: #fff !important;
+    }
+    
+    // Formatting for the h3 titles inside chart circles
+    .hours-events {
+        color: $text-color !important;
+        font-size: 2.7rem !important;
+        padding: 20px;
+        font-weight: 200;
+    }
+    
+    // Teal vertical dividing line
+    .divide {
+        border-right: 1px solid #6bbaa7;
+    }
+    
+    // Top and bottom padding for the stat card
+    .tb-padding {
+        padding-top: 13px;
+        padding-bottom: 13px;
+    }
 
-.settings {
-    color: $text-color;
-    font-size: 2.5rem;
-    float: right;
-    margin-right: 25px;
-    margin-top: 23px;
-}
-
-.progress {
-    width: 100% !important;
-    padding: 0;
-    padding-bottom: 1px;
-}
-
-.progress img {
-    width: 100% !important;
-}
-
-// Teal vertical dividing line
-.divide {
-    border-right: 1px solid #6bbaa7;
-}
-
-// Top and bottom padding for the stat card
-.tb-padding {
-    padding-top: 13px;
-    padding-bottom: 13px;
-}
-
-.name {
-    font-size: 2.7rem !important;
-    margin-bottom: 20px !important;
 }

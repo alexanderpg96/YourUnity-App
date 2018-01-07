@@ -25,12 +25,48 @@ export class CardsPage {
       
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
-        item.isRegister = true;
       }
     });
   }
 
+  register(item) {
+    var user_id = this.user.uid;
+    var url = 'https://yourunity-dev.dev/api/register_event';
+    var data = {
+      "event_id" : item.id,
+      "firedb_id" : user_id,
+      "check_in_time" : 0,
+      "duration" : 0,
+      "activity_status" : 2
+    };
+
+    let headers = new Headers ({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers }); 
+
+    // Check in user on server
+    this.http.post(url, JSON.stringify(data), options)
+    .map(res => res.json())
+    .subscribe(data =>
+      console.log(data)
+    );
+
+    console.log("uploaded");
+
+    item.isRegister = false;
+
+    this.storage.set(item.id.toString(), "registered");
+  }
+
   openEvent(item) {
+    this.storage.get(item.id.toString()).then((val) => {
+      if(val) {
+        item.isRegister = false;
+      }
+      else {
+        item.isRegister = true;
+      }      
+    }); 
+
     item.eventOpened = !item.eventOpened;
     this.eventOpened = !this.eventOpened;
 
@@ -57,6 +93,14 @@ export class CardsPage {
       
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
+        this.storage.get(item.id.toString()).then((val) => {
+          if(val) {
+            this.setRegister(item, false);
+          }
+          else {
+            this.setRegister(item, true);
+          }      
+        }); 
       }
     });
 
@@ -64,5 +108,11 @@ export class CardsPage {
       console.log('Async operation has ended');
       refresher.complete();
     }, 700);
+  }
+
+  private setRegister(item, isIt) {
+    console.log("Function called on ID " + item.id + ", value = " + isIt);
+    item.isRegister = isIt;
+    console.log(item.isRegister);
   }
 }

@@ -31,14 +31,16 @@ export class YourCardsPage {
 
         // if statement to check if time has started and check status (1 = event started, 2 = not started)
         if(item.starts <= Math.round((new Date()).getTime() / 1000) && item.ends >= Math.round((new Date()).getTime() / 1000)) {
-          storage.get(item.id.toString()).then((val) => {
+          this.storage.get(item.id.toString()).then((val) => {
             if(val) {
-              item.isInEnabled = false;
-              item.isOutEnabled = true;
+              console.log(item.id + " is checked in already");
+              this.setIn(item, false);
+              this.setOut(item, true);
             }
             else {
-              item.isInEnabled = true;
-              item.isOutEnabled = false;
+              console.log(item.id + " is not checked in yet");
+              this.setIn(item, true);
+              this.setOut(item, false);
             }      
           });      
         }
@@ -46,6 +48,13 @@ export class YourCardsPage {
           item.isInEnabled = false;
           item.isOutEnabled = false;
         }
+
+        if(item.ends <= Math.round((new Date()).getTime() / 1000)) {
+          // Don't show event
+        }
+
+        console.log(item.isInEnabled);
+        console.log(item.isOutEnabled);
       }
 
       console.log(this.cardItems);
@@ -59,17 +68,17 @@ export class YourCardsPage {
       
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
-
+        console.log("hello");
         // if statement to check if time has started and check status (1 = event started, 2 = not started)
         if(item.starts <= Math.round((new Date()).getTime() / 1000) && item.ends >= Math.round((new Date()).getTime() / 1000)) {
           this.storage.get(item.id.toString()).then((val) => {
             if(val) {
-              item.isInEnabled = false;
-              item.isOutEnabled = true;
+              this.setIn(item, false);
+              this.setOut(item, true);
             }
             else {
-              item.isInEnabled = true;
-              item.isOutEnabled = false;
+              this.setIn(item, true);
+              this.setOut(item, false);
             }      
           });      
         }
@@ -78,7 +87,6 @@ export class YourCardsPage {
           item.isOutEnabled = false;
         }
       }
-
       console.log(this.cardItems);
       console.log(this.user.uid);
     });
@@ -91,6 +99,16 @@ export class YourCardsPage {
 
   toggle(item) {
     item.opened = !item.opened;
+  }
+
+  setIn(item, isIt) {
+    console.log("in");
+    console.log(isIt);
+    item.isInEnabled = isIt;
+  }
+
+  setOut(item, isIt) {
+    item.isOutEnabled = isIt;
   }
 
   isCardOpened(item) {
