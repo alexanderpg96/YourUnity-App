@@ -17,7 +17,7 @@ page-welcome {
   .splash-info {
     position: relative;
     z-index: 2;
-    margin-top: -500px;
+    margin-top: -585px;
     text-align: center;
   }
   .splash-logo {
@@ -25,11 +25,11 @@ page-welcome {
     margin-bottom: 3px;
     background: url('../assets/img/white_logo.png') no-repeat transparent;
     background-size: 100%;
-    width: 210px;
-    height: 70px;
+    width: 260px;
+    height: 90px;
   }
   .splash-intro {
-    font-size: 18px;
+    font-size: 18pt;
     font-weight: 500;
     max-width: 80%;
     margin: auto;
@@ -46,11 +46,13 @@ page-welcome {
 
   button.login {
     z-index: 2;
-    height: 52px;
+    height: 70px;
     background: none;
     border: 1px solid #fff;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     color: #fff;
+    font-size: 2.4rem;
+    font-weight: 400;
 
     &.activated {
       background-color: rgb(220, 220, 220);
@@ -59,10 +61,12 @@ page-welcome {
 
   button.signup {
     z-index: 2;
-    height: 52px;
+    height: 70px;
     margin-top: 15px;
     background: rgba(107, 186, 167, 0.95);
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     color: #fff;
+    font-size: 2.4rem;
+    font-weight: 400;
   }
 }

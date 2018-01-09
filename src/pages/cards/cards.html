@@ -24,7 +24,7 @@
         <img [src]="item.user.avatar">
       </ion-avatar> -->
       <h1>{{item.event_name}}</h1>
-      <p class="organization">Organization</p>
+      <p class="organization">{{ item.starts * 1000 | date:'MMM d, yyyy' }}</p>
       <p class="time">{{item.starts * 1000 | date:'h:mm a'}} - {{item.ends * 1000 | date:'h:mm a'}}</p>
     </ion-item>
 
@@ -55,12 +55,12 @@
       <ion-col class="col-border">
         <button ion-button color="light" clear small icon-start center class="override-button">
             <!-- <ion-icon name='text'></ion-icon> -->
-            <div class="center"><ion-icon name='calendar'></ion-icon>{{item.starts * 1000 | date:'dd MMM'}}</div>
+            <div class="center"><ion-icon name='calendar'></ion-icon><span class="col-text">{{item.starts * 1000 | date:'dd MMM'}}</span></div>
           </button>
       </ion-col>
       <ion-col class="col-border">
           <button ion-button color="light" clear small icon-start center class="override-button">
-              <div class="center"><ion-icon name='pin'></ion-icon>1.7 mi</div>
+              <div class="center"><ion-icon name='pin'></ion-icon><span class="col-text">1.7 mi</span></div>
           </button>
       </ion-col>
     </ion-row>

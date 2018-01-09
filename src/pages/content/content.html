@@ -1,5 +1,5 @@
 <ion-header no-shadow no-border>
-    <h3>Alexander Pearson-Goulart</h3>
+    <h3>{{ user.email }}</h3>
     <ion-icon name="contacts-outline"></ion-icon>
 </ion-header>
 
@@ -7,15 +7,15 @@
   <ion-card class="white-card">  
     <ion-row>
       <ion-col>
-          <h3 class="center card-title">All Time Stats</h3>
+          <h3 class="center card-title">Volunteer Stats</h3>
       </ion-col>
     </ion-row>
     <ion-row class="tb-padding">
       <ion-col class="divide">
-        <h3 class="hours-events center">128 Hours</h3>
+        <h3 class="hours-events center">{{ time }} Hours</h3>
       </ion-col>
       <ion-col>
-          <h3 class="hours-events center">20 Events</h3>
+          <h3 class="hours-events center">{{ numEvents }} Events</h3>
         </ion-col>
     </ion-row>
   </ion-card>
