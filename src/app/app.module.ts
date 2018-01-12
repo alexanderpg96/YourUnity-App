@@ -9,6 +9,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder } from '@ionic-native/native-geocoder';
 
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
@@ -82,6 +85,9 @@ export function provideSettings(storage: Storage) {
     Api,
     Items,
     User,
+    GoogleMaps,
+    Geolocation,
+    NativeGeocoder,
     Camera,
     SplashScreen,
     StatusBar,

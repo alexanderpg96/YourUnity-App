@@ -5,6 +5,9 @@ import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
+import { Platform } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import firebase from 'firebase';
 
@@ -20,11 +23,26 @@ export class YourCardsPage {
   isOutEnabled: Boolean = false;
   user = firebase.auth().currentUser;
   checkin: any;
+  ios: Boolean;
+  latitude : any;
+  longitude : any;
+  location: Geolocation;
+  userLat: any;
+  userLong: any;
+  distance: number;
 
 
-  constructor(public navCtrl: NavController, public http: Http, public storage: Storage) {
+  constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
     this.http.get('https://yourunity-dev.dev/api/user_events/' + this.user.uid).map(res => res.json()).subscribe(data => {
       this.cardItems = data;
+      console.log(this.cardItems);
+
+      this.geolocation.getCurrentPosition().then((resp) => {
+        this.userLat = resp.coords.latitude;
+        this.userLong = resp.coords.longitude;
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
       
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
@@ -53,6 +71,14 @@ export class YourCardsPage {
           // Don't show event
         }
 
+        this.nativeGeocoder.forwardGeocode(item.location).then((coordinates: NativeGeocoderForwardResult) => {
+          item.latitude = coordinates.latitude;
+          item.longitude = coordinates.longitude;
+        }).catch((error: any) => console.log(error));
+
+        item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
+        
+        console.log(item.distance);
         console.log(item.isInEnabled);
         console.log(item.isOutEnabled);
       }
@@ -60,6 +86,22 @@ export class YourCardsPage {
       console.log(this.cardItems);
       console.log(this.user.uid);
     });
+
+    if (this.platform.is('ios')) {
+      this.ios = true;
+    }
+    else {
+      this.ios = false;
+    }
+  }
+
+  calculateDistance(lat1:number,lat2:number,long1:number,long2:number){
+    let p = 0.017453292519943295;    // Math.PI / 180
+    let c = Math.cos;
+    let a = 0.5 - c((lat1-lat2) * p) / 2 + c(lat2 * p) *c((lat1) * p) * (1 - c(((long1- long2) * p))) / 2;
+    let dis = (12742 * Math.asin(Math.sqrt(a))); // 2 * R; R = 6371 km
+    dis = Math.round( ((dis)) * 10 ) / 10;
+    return dis;
   }
 
   doRefresh(refresher) {
@@ -86,6 +128,13 @@ export class YourCardsPage {
           item.isInEnabled = false;
           item.isOutEnabled = false;
         }
+
+        this.nativeGeocoder.forwardGeocode(item.location).then((coordinates: NativeGeocoderForwardResult) => {
+          item.latitude = coordinates.latitude;
+          item.longitude = coordinates.longitude;
+        }).catch((error: any) => console.log(error));
+
+        item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
       }
       console.log(this.cardItems);
       console.log(this.user.uid);
