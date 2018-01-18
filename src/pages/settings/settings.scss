@@ -1,3 +1,13 @@
 page-settings {
+    ion-header {
+        .toolbar-background, .toolbar-background-ios, .toolbar {
+            background: #3f3f3f !important;
+            opacity: 1 !important;
+        }
+    }
 
+    .toolbar-title-ios, .toolbar-title {
+        color: #fff !important;
+        font-size: 16pt;
+    }
 }

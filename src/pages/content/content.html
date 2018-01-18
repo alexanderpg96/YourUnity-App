@@ -1,6 +1,8 @@
 <ion-header no-shadow no-border>
-    <h3>{{ user.email }}</h3>
-    <ion-icon name="contacts-outline"></ion-icon>
+    <h3>Hello, {{ user.displayName }}</h3>
+    <button item-right clear (click)='openSettings()'>
+      <ion-icon name="contacts-outline"></ion-icon>
+    </button>
 </ion-header>
 
 <ion-content>

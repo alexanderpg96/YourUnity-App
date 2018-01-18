@@ -96,4 +96,7 @@
     <plugin name="cordova-plugin-nativegeocoder" spec="^2.0.4">
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Use geocoder service" />
     </plugin>
+    <plugin name="cordova-plugin-calendar" spec="^5.0.0">
+        <variable name="CALENDAR_USAGE_DESCRIPTION" value=" " />
+    </plugin>
 </widget>

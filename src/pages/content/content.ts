@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
+//import { SettingsPage } from '../settings/settings';
 
 @IonicPage()
 @Component({
@@ -33,6 +34,10 @@ export class ContentPage {
       console.log(this.numEvents);
       console.log(this.time);
     });
+  }
+
+  openSettings() {
+    this.navCtrl.push('SettingsPage');
   }
 
 }

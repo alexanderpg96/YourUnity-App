@@ -2,94 +2,90 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Http } from '@angular/http';
+import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import 'rxjs/add/operator/map';
 
 import { Settings } from '../../providers/providers';
+
+import firebase from 'firebase';
 
 /**
  * The Settings page is a simple form that syncs with a Settings provider
  * to enable the user to customize settings for the app.
  *
  */
+
+let _this;
+
 @IonicPage()
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html'
 })
 export class SettingsPage {
-  // Our local settings object
-  options: any;
+  
+  user = firebase.auth().currentUser;
 
-  settingsReady = false;
-
-  form: FormGroup;
-
-  profileSettings = {
-    page: 'profile',
-    pageTitleKey: 'SETTINGS_PAGE_PROFILE'
+  account: { email: string, name: string } =  {
+   email: this.user.email,
+   name:  this.user.displayName
   };
 
-  page: string = 'main';
-  pageTitleKey: string = 'SETTINGS_TITLE';
-  pageTitle: string;
-
-  subSettings: any = SettingsPage;
-
-  constructor(public navCtrl: NavController,
-    public settings: Settings,
-    public formBuilder: FormBuilder,
-    public navParams: NavParams,
-    public translate: TranslateService) {
-  }
-
-  _buildForm() {
-    let group: any = {
-      option1: [this.options.option1],
-      option2: [this.options.option2],
-      option3: [this.options.option3]
-    };
-
-    switch (this.page) {
-      case 'main':
-        break;
-      case 'profile':
-        group = {
-          option4: [this.options.option4]
-        };
-        break;
-    }
-    this.form = this.formBuilder.group(group);
-
-    // Watch the form for changes, and
-    this.form.valueChanges.subscribe((v) => {
-      this.settings.merge(this.form.value);
-    });
+  constructor(public navCtrl: NavController, public settings: Settings, public navParams: NavParams, public http: Http) {
+    
   }
 
   ionViewDidLoad() {
-    // Build an empty form for the template to render
-    this.form = this.formBuilder.group({});
+    
   }
 
   ionViewWillEnter() {
-    // Build an empty form for the template to render
-    this.form = this.formBuilder.group({});
-
-    this.page = this.navParams.get('page') || this.page;
-    this.pageTitleKey = this.navParams.get('pageTitleKey') || this.pageTitleKey;
-
-    this.translate.get(this.pageTitleKey).subscribe((res) => {
-      this.pageTitle = res;
-    })
-
-    this.settings.load().then(() => {
-      this.settingsReady = true;
-      this.options = this.settings.allSettings;
-
-      this._buildForm();
-    });
+    
   }
 
-  ngOnChanges() {
-    console.log('Ng All Changes');
+  updateUser() {
+    _this = this;
+
+    this.user.updateEmail(this.account.email).then(function() {
+      // Update successful.
+      console.log("Email updated");
+    }).catch(function(error) {
+      // An error happened.
+      console.log("Email not updated");
+      console.log(error);
+    });
+
+    this.user.updateProfile({
+      displayName: this.account.name,
+      photoURL: ""
+    }).then(function() {
+      // Update successful.
+      console.log("Info changed");
+    }).catch(function(error) {
+      console.log("Info not changed");
+      console.log(error);
+    });
+
+    var user_id = this.user.uid;
+      var url = 'https://yourunity-dev.dev/api/add_attendee/' + user_id;
+      var data = {
+        "name" : this.account.name,
+        "avatar" : "default.jpg",
+        "email" : this.account.email
+      };
+
+      let headers = new Headers ({ 'Content-Type': 'application/json' });
+      let options = new RequestOptions({ headers: headers }); 
+
+      // Check in user on server
+      this.http.patch(url, JSON.stringify(data), options)
+      .map(res => res.json())
+      .subscribe(data =>
+        console.log(data)
+      );
+
+      console.log("uploaded");
+      _this.navCtrl.pop();
   }
 }
