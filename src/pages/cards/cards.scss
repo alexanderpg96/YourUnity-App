@@ -1,7 +1,102 @@
 page-cards {
 
-    .card:first-of-type {
-        margin-top: 45px !important;
+    // .card:first-of-type {
+    //     margin-top: 45px !important;
+    // }
+
+    ion-refresher {
+        margin-top: 20px;
+    }
+
+    a {
+        color: #efefef !important;
+        text-decoration: none;
+    }
+
+    .content {
+        padding-top: 45px;
+    }
+
+    .noScroll .scroll-content {
+        overflow: hidden;
+    }
+
+    .noScroll .card:not(.absolute) {
+        opacity: 0.2;
+    }
+
+    .page-title {
+        padding-top: 20px !important;
+    }
+
+    .closed {
+        position: relative;
+        height: 0px;
+        overflow: hidden;
+        transition: 0.2s;
+        background: #2e2e2e;
+        display: flex;
+    }
+
+    .absolute {
+        position: fixed;
+        display: flex;
+        flex-flow: column;
+        height: 85%;
+        top: 15px;
+        left: 0;
+        z-index: 999;
+        transition: 0.2s;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .open {
+        background: #2e2e2e;
+        transition: 0.2s;
+        width: 100%;
+        flex: 1 auto;
+        opacity: 1;
+        padding: 0;
+        overflow-y: scroll;
+        display: block;
+        text-align: justify;
+    }
+
+    .open img {
+        height: 220px;
+        width: 100vw;
+        -webkit-mask-image: -webkit-gradient(linear, left 25%, left bottom, from(rgba(0,0,0,1)), to(rgba(255,255,255,.0)))
+    }
+
+    .open p {
+        padding: 20px;
+        font-size: 14pt !important;
+        color: #efefef;
+    }
+
+    .absolute h1 {
+        font-size: 2.8rem !important;
+    }
+
+    .absolute .organization {
+        font-size: 2.2rem !important;
+    }
+
+    .absolute .time {
+        font-size: 2rem !important;
+    }
+
+    .registerButton {
+        margin-left: 5%;
+        margin-top: 15px;
+        width: 90%;
+        height: 60px !important;
+        color: #efefef;
+        //background: rgba(107, 186, 167, 1);
+        font-size: 2.3rem;
     }
 
     .toolbar {
@@ -9,7 +104,10 @@ page-cards {
     }
     
     h2 {
+        font-size: 26pt !important;
         color: $text-color !important;
+        font-weight: 600 !important;
+        margin-left: 14px;
     }
     
     .card-content p {
@@ -17,17 +115,17 @@ page-cards {
     }
     
     .organization {
-        color: #2e2e2e !important;
+        color: #efefef !important;
         font-size: 1.9rem !important;
     }
     
     .time {
-        color: #2e2e2e !important;
+        color: #efefef !important;
         font-size: 1.7rem !important;
     }
     
     .item {
-        background-color: #fcfcfc;
+        background-color: #2e2e2e;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
@@ -56,6 +154,28 @@ page-cards {
         margin-top: 7px !important;
         margin-bottom: 7px !important;
     }
+
+    ion-icon {
+        font-size: 2.4rem !important;
+        color: #efefef !important;
+    }
+
+    .search {
+        font-size: 3.6rem !important;
+        float: right;
+        color: #6bbaa7 !important;
+    }
+
+    .search-button {
+        position: absolute;
+        top: 18px;
+        right: 13px;
+        background: #3f3f3f;
+    }
+
+    .col-text {
+        font-size: 14pt !important;
+    }
     
     .override-button {
         height: 30px !important;
@@ -67,6 +187,21 @@ page-cards {
     
     .no-overflow {
         width: 100%;
+    }
+
+    .searchbar {
+        background: #3f3f3f !important;
+    }
+
+    .searchbar-ios .searchbar-input {
+        background: #2e2e2e !important;
+        padding: 25px !important;
+        font-size: 15pt;
+        color: #fff;
+    }
+
+    .searchbar-ios.searchbar-left-aligned .searchbar-search-icon {
+        opacity: 0;
     }
 
 }

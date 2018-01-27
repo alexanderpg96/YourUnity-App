@@ -1,7 +1,16 @@
 page-your-cards {
 
+    a {
+        color: #efefef !important;
+        text-decoration: none;
+    }
+
     .card:first-of-type {
         margin-top: 45px !important;
+    }
+
+    .card {
+        z-index: 999;
     }
 
     // Collapse and expand of cards
@@ -10,7 +19,7 @@ page-your-cards {
         height: 0px;
         overflow: hidden;
         transition: 0.2s;
-        background: #fcfcfc;
+        background: #2e2e2e;
         display: flex;
     }
 
@@ -26,12 +35,22 @@ page-your-cards {
 
     .open {
         height: 90px;
-        background: #fcfcfc;
+        background: #2e2e2e;
         transition: 0.2s;
         width: 100%;
         padding: 10px;
         display: flex;
         opacity: 1;
+    }
+
+    .open .checkin {
+        opacity: 1;
+        transition: 0s;
+    }
+
+    .open .checkout {
+        opacity: 1;
+        transition: 0s;
     }
 
     .activeButton {
@@ -67,17 +86,17 @@ page-your-cards {
     }
 
     .organization {
-        color: #2e2e2e !important;
+        color: #efefef !important;
         font-size: 1.9rem !important;
     }
 
     .time {
-        color: #2e2e2e !important;
+        color: #efefef !important;
         font-size: 1.7rem !important;
     }
 
     .item {
-        background-color: #fcfcfc;
+        background-color: #2e2e2e;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
@@ -97,6 +116,18 @@ page-your-cards {
         padding-bottom: 0px !important;
         margin-top: 7px !important;
         margin-bottom: 7px !important;
+    }
+
+    .col-border:last-of-type {
+        border-right: 0px;
+    }
+
+    ion-icon {
+        font-size: 2.4rem !important;
+    }
+
+    .col-text {
+        font-size: 14pt !important;
     }
 
     .override-button {

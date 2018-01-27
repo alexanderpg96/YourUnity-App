@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { Http } from '@angular/http';
+import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import 'rxjs/add/operator/map';
 
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
@@ -16,11 +19,14 @@ export class SignupPage {
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
-  account: { name: string, email: string, password: string } = {
-    name: 'Test Human',
-    email: 'test@example.com',
+  account: { name_first: string, name_last: string, email: string, password: string } = {
+    name_first: 'First Name',
+    name_last: 'Last Name',
+    email: 'Your Email',
     password: 'test'
   };
+
+  baseUrl: string = 'https://yourunity.org';
 
   // Our translated text strings
   private signupErrorString: string;
@@ -28,7 +34,7 @@ export class SignupPage {
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService, public http: Http) {
 
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
@@ -40,33 +46,64 @@ export class SignupPage {
 
     var errorBool = false;
 
-      firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
-        // Handle Errors here.
-        errorBool = true;
-  
-        alert(error.code + error.message);
+    firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // [START_EXCLUDE]
+      if (errorCode == 'auth/weak-password') {
+        alert('The password is too weak.');
+      } 
+      else {
+        alert(errorMessage);
+      }
+      console.log(error);
+      // [END_EXCLUDE]
+    });
+    // [END createwithemail]
 
-      });
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) {
+        // Update the user's name as well
+        user.updateProfile({
+          displayName: this.account.name_first + " " + this.account.name_last,
+          photoURL: ""
+        }).then(function() {
+          console.log(user.uid);
+        }).catch(function(error) {
+          // An error happened.
+        });
 
-      firebase.auth().onAuthStateChanged(user => {
-        if(user) {
-          this.navCtrl.push(MainPage);
-        }
-      });
+        this.navCtrl.push(MainPage);
 
-    // this.user.signup(this.account).subscribe((resp) => {
-    //   // this.navCtrl.push(MainPage);
-    // }, (err) => {
-
-    //   this.navCtrl.push(MainPage);
-
-    //   // Unable to sign up
-    //   let toast = this.toastCtrl.create({
-    //     message: this.signupErrorString,
-    //     duration: 3000,
-    //     position: 'top'
-    //   });
-    //   toast.present();
-    // });
+      this.pushAccount(firebase.auth().currentUser.uid);
+      }
+    });
   }
+
+  pushAccount(user) {
+    // Push information to the database
+    var user_id = user;
+    var url = this.baseUrl + '/api/add_attendee';
+    var data = {
+      "firedb_id" : user_id,
+      "name_first" : this.account.name_first,
+      "name_last" : this.account.name_last,
+      "avatar" : "default.jpg",
+      "email" : this.account.email
+    };
+
+    console.log(data);
+
+    let headers = new Headers ({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers }); 
+
+    // Check in user on server
+    this.http.post(url, JSON.stringify(data), options)
+    .map(res => res.json())
+    .subscribe(data =>
+      console.log(data)
+    );
+  }
+  
 }

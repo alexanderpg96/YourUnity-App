@@ -4,10 +4,11 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
-import { FirstRunPage } from '../pages/pages';
+import { FirstRunPage, MainPage } from '../pages/pages';
 import { Settings } from '../providers/providers';
 
 import firebase from 'firebase';
+import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
   template: `<ion-menu [content]="content">
@@ -53,7 +54,7 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
+      this.statusBar.styleBlackTranslucent();
       this.splashScreen.hide();
     });
     this.initTranslate();
@@ -66,6 +67,7 @@ export class MyApp {
       storageBucket: "yourunity-9123d.appspot.com",
       messagingSenderId: "43544297169"
     });
+
   }
 
   initTranslate() {

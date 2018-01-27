@@ -1,57 +1,212 @@
-page-home {
+page-content {
 
-}
+    ion-header {
+        background-color: #2e2e2e;
+        padding: 30px 20px 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #efefef;
+    }
 
-.white-card:first-of-type {
-    margin-top: 45px !important;
-}
+    ion-header h3 {
+        color: #efefef !important;
+        font-weight: 400;
+        font-size: 2.6rem;
+    }
 
-.white-card {
-    background-color: #fff !important;
-}
+    ion-icon {
+        color: #fff;
+    }
 
-// Gives a little white space at the top to make the chart look better
-.space {
-    background: #fff !important;
-}
+    .account {
+        color: #6bbaa7;
+        font-size: 4.2rem !important;
+    }
 
-// Formatting for the h3 titles inside chart circles
-.hours-events {
-    color: $text-color !important;
-    font-size: 2.7rem !important;
-    padding: 20px;
-}
+    .account-android {
+        color: #6bbaa7;
+        font-size: 3.9rem !important;
+    }
 
-.settings {
-    color: $text-color;
-    font-size: 2.5rem;
-    float: right;
-    margin-right: 25px;
-    margin-top: 23px;
-}
+    button {
+        background: #2e2e2e;
+    }
 
-.progress {
-    width: 100% !important;
-    padding: 0;
-    padding-bottom: 1px;
-}
+    .card-title {
+        font-size: 3rem !important;
+        font-weight: 400;
+        padding: 10px;
+    }
+    
+    // Gives a little white space at the top to make the chart look better
+    .space {
+        background: #fff !important;
+    }
+    
+    // Formatting for the h3 titles inside chart circles
+    .hours-events {
+        color: $text-color !important;
+        font-size: 2.7rem !important;
+        padding: 20px;
+        font-weight: 400;
+    }
+    
+    // Teal vertical dividing line
+    .divide {
+        border-right: 1px solid #6bbaa7;
+    }
+    
+    // Top and bottom padding for the stat card
+    .tb-padding {
+        padding-top: 13px;
+        padding-bottom: 13px;
+    }
 
-.progress img {
-    width: 100% !important;
-}
 
-// Teal vertical dividing line
-.divide {
-    border-right: 1px solid #6bbaa7;
-}
 
-// Top and bottom padding for the stat card
-.tb-padding {
-    padding-top: 13px;
-    padding-bottom: 13px;
-}
+    ///////////////// YOUR-CARDS STYLING ////////////////////
 
-.name {
-    font-size: 2.7rem !important;
-    margin-bottom: 20px !important;
+    a {
+        color: #efefef !important;
+        text-decoration: none;
+    }
+
+    .card {
+        z-index: 999;
+    }
+
+    // Collapse and expand of cards
+
+    .closed {
+        height: 0px;
+        overflow: hidden;
+        transition: 0.2s;
+        background: #2e2e2e;
+        display: flex;
+    }
+
+    .closed .checkin {
+        opacity: 0;
+        transition: 0s;
+    }
+
+    .closed .checkout {
+        opacity: 0;
+        transition: 0s;
+    }
+
+    .open {
+        height: 90px;
+        background: #2e2e2e;
+        transition: 0.2s;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        opacity: 1;
+    }
+
+    .open .checkin {
+        opacity: 1;
+        transition: 0s;
+    }
+
+    .open .checkout {
+        opacity: 1;
+        transition: 0s;
+    }
+
+    .activeButton {
+        color: #6bbaa7 !important;
+        border: 1px solid #6bbaa7 !important;
+    }
+
+    .checkin {
+        color: #999;
+        border: 1px solid #999;
+    }
+
+    .checkout {
+        color: #999;
+        border: 1px solid #999;
+    }
+
+    .open button {
+        flex-basis: 100%;
+        height: 55px !important;
+    }
+
+    .toolbar {
+        background-color: #3f3f3f !important;
+    }
+
+    h2 {
+        color: $text-color !important;
+        font-size: 3.5rem !important;
+        text-align: center;
+        margin-top: 50px;
+        font-weight: 600 !important;
+    }
+
+    .card-content p {
+        color: $text-color !important;
+    }
+
+    .organization {
+        color: #efefef !important;
+        font-size: 1.9rem !important;
+    }
+
+    .time {
+        color: #efefef !important;
+        font-size: 1.7rem !important;
+    }
+
+    .item {
+        background-color: #2e2e2e;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .card:first-of-type {
+        background-color: #2e2e2e !important;
+    }
+
+    .card {
+        background-color: #6bbaa7 !important;
+        border-radius: 5px;
+        margin-top: 20px !important;
+    }
+
+    .col-border {
+        text-align: center;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-right: 1px solid #fff;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        margin-top: 7px !important;
+        margin-bottom: 7px !important;
+    }
+
+    .col-border:last-of-type {
+        border-right: 0px;
+    }
+
+    ion-icon {
+        font-size: 2.4rem !important;
+    }
+
+    .col-text {
+        font-size: 14pt !important;
+    }
+
+    .override-button {
+        height: 30px !important;
+    }
+
+    .no-overflow {
+        width: 100%;
+    }
+
 }

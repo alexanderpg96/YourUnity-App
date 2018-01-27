@@ -1,5 +1,17 @@
 import { Component } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { Searchbar } from 'ionic-angular';
 import { IonicPage, NavController } from 'ionic-angular';
+import { Http } from '@angular/http';
+import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+import { Storage } from '@ionic/storage';
+import { Platform } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
+
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -7,45 +19,208 @@ import { IonicPage, NavController } from 'ionic-angular';
   templateUrl: 'cards.html'
 })
 export class CardsPage {
+  @ViewChild('topSearch') searchbar: Searchbar;
+
   cardItems: any[];
 
-  constructor(public navCtrl: NavController) {
-    this.cardItems = [
-      {
-        name: 'Gardening Event',
-        organization: 'Community Garden',
-        time: '5:00 PM - 7:00 PM',
-        cat_image: 'assets/img/eco.jpg',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae dui sit amet nisl consectetur sodales. Sed lacinia arcu porta eros fermentum, quis dictum lorem varius. Nulla eros orci, tempor vitae ex ut, eleifend vestibulum purus. Praesent fermentum libero sed pellentesque ullamcorper. Aenean ornare massa convallis dui congue posuere. Cras sodales massa tortor, quis iaculis ligula molestie ornare. Sed et purus nec magna cursus semper. Proin dictum nunc metus, et iaculis turpis luctus ac. Morbi enim justo, eleifend ut leo eget, imperdiet sagittis enim. In eleifend libero ante, in rutrum ante accumsan eu. Vestibulum vitae lectus blandit, iaculis purus et, eleifend eros. Duis gravida nisi id risus porttitor laoreet. Pellentesque lectus sem, cursus at accumsan non, venenatis ut est. Pellentesque eget velit diam. Aliquam vel rutrum lorem. Integer pulvinar metus eget tortor mollis sodales. Sed consectetur metus eu velit scelerisque ornare. Aliquam rhoncus eros sed nisl maximus condimentum. Etiam facilisis ex sit amet diam rutrum ultricies in non urna. Suspendisse nec sapien mattis, malesuada est in, ornare odio. Ut porta, magna eget porttitor euismod, enim lorem sodales nisl, a rhoncus purus turpis vitae lorem. Donec sed arcu ut tellus blandit molestie. Nam ac tempor ex. Etiam vitae faucibus lectus, ut pellentesque augue. Vivamus placerat tincidunt velit, in convallis lorem faucibus eu. In nunc est, posuere at mi id, commodo ultricies felis. Suspendisse tincidunt non mi a scelerisque. Integer tincidunt nec ipsum quis tempus. Praesent dignissim nibh elit, at commodo nunc fermentum eu. Maecenas sodales nisl at diam feugiat, condimentum vehicula sem laoreet. Pellentesque consectetur vestibulum diam, quis semper felis malesuada commodo. Morbi sit amet euismod orci, nec accumsan enim. Cras tristique et metus non aliquam. Pellentesque vel eleifend massa. Nulla eget massa lacinia, pellentesque lectus vel, ullamcorper quam.',
-      },
-      {
-        name: 'Feed the Homeless',
-        organization: 'Dau Bum',
-        time: '3:00 PM - 8:00 PM',
-        cat_image: 'assets/img/splashbg.jpg',
-        content: 'Come by the temple and make some sandwiches to hand out to the homeless community in San Diego',
-      },
-      {
-        name: 'Mission Beach Clean Up',
-        organization: 'San Diego Parks and Recreation',
-        time: '8:00 AM - 12:00 PM',
-        cat_image: 'assets/img/splashbg.jpg',
-        content: 'San Diego beaches are beautiful and clean. Let us keep them that way',
-      },
-      {
-        name: 'Gardening Event 2',
-        organization: 'Community Garden',
-        time: '12:00 PM - 3:00 PM',
-        cat_image: 'assets/img/eco.jpg',
-        content: 'Come and join us to lay mulch and plant flowers!',
-      }
-    ];
+  eventOpened: Boolean = false;
 
+  isRegister: Boolean = true;
+
+  user = firebase.auth().currentUser;
+
+  ios: Boolean;
+
+  latitude : any;
+  longitude : any;
+  userLat: any;
+  userLong: any;
+  distance: number;
+
+  searched: Boolean = false;
+
+  baseUrl: string = 'https://yourunity.org';
+
+  constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
+    if (this.platform.is('ios')) {
+      this.ios = true;
+    }
+    else {
+      this.ios = false;
+    }
   }
 
-  openEvent(event: any) {
-    this.navCtrl.push('EventDetailPage', {
-      event: event
+  ionViewDidLoad() {
+    this.pullEvents();
+  }
+
+  pullEvents() {
+    this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
+      this.cardItems = data;
+      console.log(this.cardItems);
+
+      this.geolocation.getCurrentPosition().then((resp) => {
+        this.userLat = resp.coords.latitude;
+        this.userLong = resp.coords.longitude;
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
+
+      for(var i = 0; i < this.cardItems.length; i++) {
+        var item = this.cardItems[i];
+        this.storage.get(item.id.toString()).then((val) => {
+          if(val) {
+            this.setRegister(item, false);
+          }
+          else {
+            this.setRegister(item, true);
+          }      
+        }); 
+      }
+
+      this.calculateCoords(this.cardItems);
     });
+
+    console.log("Lat: " + this.userLat);
+    console.log("Long: " + this.userLong);
+  }
+
+  calculateCoords(cardItems) {
+    for(var i = 0; i < this.cardItems.length; i++) {
+      var item = this.cardItems[i];
+
+      item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
+    }
+  }
+
+  calculateDistance(lat1:number,lat2:number,long1:number,long2:number){
+    let p = 0.017453292519943295;    // Math.PI / 180
+    let c = Math.cos;
+    let a = 0.5 - c((lat1-lat2) * p) / 2 + c(lat2 * p) *c((lat1) * p) * (1 - c(((long1- long2) * p))) / 2;
+    let dis = (12742 * Math.asin(Math.sqrt(a))); // 2 * R; R = 6371 km
+    dis = Math.round( ((dis)) * 10 ) / 10;
+    return dis;
+  }
+
+  register(item) {
+    var user_id = firebase.auth().currentUser.uid;
+    var url = this.baseUrl + '/api/register_event';
+    var data = {
+      "event_id" : item.id,
+      "firedb_id" : user_id,
+      "check_in_time" : 0,
+      "duration" : 0,
+      "activity_status" : 2
+    };
+
+    let headers = new Headers ({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers }); 
+
+    // Check in user on server
+    this.http.post(url, JSON.stringify(data), options)
+    .map(res => res.json())
+    .subscribe(data =>
+      console.log(data)
+    );
+
+    console.log("Registration completed");
+
+    item.isRegister = false;
+
+    this.storage.set(item.id.toString(), "registered");
+  }
+
+  openEvent(item) {
+    this.storage.get(item.id.toString()).then((val) => {
+      if(val) {
+        item.isRegister = false;
+      }
+      else {
+        item.isRegister = true;
+      }      
+    }); 
+
+    item.eventOpened = !item.eventOpened;
+    this.eventOpened = !this.eventOpened;
+
+    console.log();
+    console.log(item.latitude);
+    console.log(item.longitude);
+  }
+
+  isOpened() {
+    return this.eventOpened;
+  }
+
+  isCardOpened(item) {
+    return item.eventOpened;
+  }
+
+  canRegister(item) {
+    return item.isRegister;
+  }
+
+  doRefresh(refresher) {
+    this.pullEvents();
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 700);
+  }
+
+  private setRegister(item, isIt) {
+    console.log("Function called on ID " + item.id + ", isRegistered = " + isIt);
+    item.isRegister = isIt;
+    console.log(item.isRegister);
+  }
+
+  getEvents(event) {
+    var q = event.srcElement.value; // the query
+
+    if(!q) {
+      return;
+    }
+
+    this.cardItems = this.cardItems.filter((v) => {
+      if((v.event_name && q)) {
+        if(v.event_name.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+          this.searched = true;
+          console.log(this.searched);
+          return true;
+        }
+        return false;
+      }
+    });
+
+    
+  }
+
+  resetSearch() {
+    this.searched = false;
+
+    this.searchbar.clearInput(null);
+
+    this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
+      this.cardItems = data;
+      
+      for(var i = 0; i < this.cardItems.length; i++) {
+        var item = this.cardItems[i];
+        this.storage.get(item.id.toString()).then((val) => {
+          if(val) {
+            this.setRegister(item, false);
+          }
+          else {
+            this.setRegister(item, true);
+          }      
+        }); 
+      }
+
+      this.calculateCoords(this.cardItems);
+    });
+  }
+
+  isSearched() {
+    return this.searched;
   }
 }

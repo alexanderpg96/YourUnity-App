@@ -7,38 +7,82 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content [ngClass]="{noScroll: isOpened()}">
 
-  <ion-card *ngFor="let item of cardItems">
+  <h2 class="page-title">All Events</h2>
 
+  <ion-searchbar #topSearch (change)="getEvents($event)"></ion-searchbar>
+
+  <button item-right (click)='resetSearch()' class="search-button" [ngClass]="{hide: !isSearched()}">
+    <ion-icon name="refresh-circle-outline" class="search"></ion-icon>
+  </button>
+
+  <ion-refresher (ionRefresh)="doRefresh($event);">
+
+    <ion-refresher-content>
+    
+    </ion-refresher-content>
+    
+  </ion-refresher>
+
+  <ion-card class="card" *ngFor="let item of cardItems" [ngClass]="{absolute: isCardOpened(item)}">
+      
     <ion-item class="no-overflow" (click)="openEvent(item)">
       <!-- <ion-avatar item-start>
         <img [src]="item.user.avatar">
       </ion-avatar> -->
-      <h1>{{item.name}}</h1>
-      <p class="organization">{{item.organization}}</p>
-      <p class="time">{{item.time}}</p>
+      <h1>{{item.event_name}}</h1>
+      <p class="organization">{{ item.starts * 1000 | date:'MMM d, yyyy' }}</p>
+      <p class="time">{{item.starts * 1000 | date:'h:mm a'}} - {{item.ends * 1000 | date:'h:mm a'}}</p>
     </ion-item>
+
+    <div class="closed" [ngClass]="{open: isCardOpened(item)}">
+
+      <div class="registerOverlay">
+
+          <img src="assets/img/eco.jpg" />
+
+          <button ion-button outline class="registerButton" [ngClass]="{activeButton: canRegister(item)}" 
+          (click)="register(item)" 
+          [disabled]="!canRegister(item)">Register</button>
+
+      </div>
+
+      <p>{{ item.event_description }}</p>
+    </div>
 
     <!-- <img [src]="item.cat_image"> -->
 
     <ion-row>
       <ion-col class="col-border">
         <button ion-button color="light" clear small icon-start class="override-button">
-            <!-- <ion-icon name='thumbs-up'></ion-icon> -->
-            <ion-icon name='leaf'></ion-icon>
+            <div *ngIf="item.type_id === 1"><ion-icon name='paw'></ion-icon></div>
+            <div *ngIf="item.type_id === 2"><ion-icon name='school'></ion-icon></div>
+            <div *ngIf="item.type_id === 3"><ion-icon name='glasses'></ion-icon></div>
+            <div *ngIf="item.type_id === 4"><ion-icon name='leaf'></ion-icon></div>
+            <div *ngIf="item.type_id === 5"><ion-icon name='restaurant'></ion-icon></div>
+            <div *ngIf="item.type_id === 6"><ion-icon name='home'></ion-icon></div>
+            <div *ngIf="item.type_id === 7"><ion-icon name='body'></ion-icon></div>
+            <div *ngIf="item.type_id === 8"><ion-icon name='people'></ion-icon></div>
+            <div *ngIf="item.type_id === 9"><ion-icon name='brush'></ion-icon></div>
+            <div *ngIf="item.type_id === 10"><ion-icon name='laptop'></ion-icon></div>
+            <div *ngIf="item.type_id === 11"><ion-icon name='happy'></ion-icon></div>
+            <div *ngIf="item.type_id === 12"><ion-icon name='list-box'></ion-icon></div>
           </button>
       </ion-col>
       <ion-col class="col-border">
         <button ion-button color="light" clear small icon-start center class="override-button">
             <!-- <ion-icon name='text'></ion-icon> -->
-            <div class="center"><ion-icon name='calendar'></ion-icon>05 Nov</div>
+            <div class="center"><ion-icon name='calendar'></ion-icon><span class="col-text">{{item.starts * 1000 | date:'dd MMM'}}</span></div>
           </button>
       </ion-col>
       <ion-col class="col-border">
-          <button ion-button color="light" clear small icon-start center class="override-button">
-              <div class="center"><ion-icon name='pin'></ion-icon>1.7 mi</div>
-          </button>
+          <div *ngIf="ios; then iosMap else googleMap"></div>
+          <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+          <ng-template #googleMap><a button href="http://maps.google.com?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+          <!-- <button ion-button color="light" clear small icon-start center class="override-button" (click)="startExternalMap()">
+              <div class="center"><ion-icon name='pin'></ion-icon><span class="col-text">1.7 mi</span></div>
+          </button> -->
       </ion-col>
     </ion-row>
   </ion-card>

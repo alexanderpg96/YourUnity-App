@@ -1,3 +1,65 @@
 page-settings {
+    ion-header {
+        .toolbar-background, .toolbar-background-ios, .toolbar {
+            background: #3f3f3f !important;
+            opacity: 1 !important;
+        }
+    }
 
+    .toolbar-title-ios, .toolbar-title {
+        color: #fff !important;
+        font-size: 16pt;
+    }
+
+    .label {
+        font-size: 22pt;
+        margin-left: 10px;
+    }
+
+    .text-input {
+        font-size: 18pt;
+    }
+
+    .item {
+        border-style: none !important;
+        margin-bottom: 20px;
+    }
+
+    .item-inner {
+        border-style: none !important;
+    }
+
+    .list-ios {
+        border-top: none !important;
+    }
+
+    .item-md.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+.item-md.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+    border-bottom-color: transparent;
+    box-shadow: inset 0 -1px 0 0 #3f3f3f;
+}
+
+    .text-input {
+        padding: 15px;
+        background: #2e2e2e;
+        border-radius: 5px;
+    }
+
+    .change_pass {
+        font-size: 18pt;
+    }
+
+    .button {
+        height: 70px !important;
+        font-weight: 400;
+        font-size: 2.4rem;
+        width: 95vw;
+        position: absolute;
+        bottom: 20px;
+        left: 2.5vw;
+    }
+
+    h3 {
+        color: #efefef !important;
+    }
 }

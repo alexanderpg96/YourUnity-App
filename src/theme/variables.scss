@@ -12,11 +12,15 @@ $font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        #2e2e2e;
-$background-color:  #efefef;
+$text-color:        #efefef;
+$background-color:  #3f3f3f;
 
-$toolbar-md-background: #efefef;
-$tabbar-md-background: #fff;
+$toolbar-md-background: #3f3f3f;
+$tabbar-md-background: #2e2e2e;
+
+$refresher-icon-color: #efefef;
+$refresher-text-color: #efefef;
+$refresher-border-color: #3f3f3f;
 
 
 // Named Color Variables
@@ -32,7 +36,8 @@ $colors: (
   secondary:  #317ee2,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #2e2e2e
+  dark:       #2e2e2e,
+  darker:     #3f3f3f
 );
 
 
@@ -40,7 +45,8 @@ $colors: (
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
-
+$searchbar-md-input-text-color: #ccc;
+$searchbar-ios-input-placeholder-color: #ccc;
 
 
 // App Material Design Variables
@@ -66,6 +72,33 @@ $colors: (
 
 @import "ionic.theme.default";
 
+h3 {
+  color: #efefef !important;
+}
+
+.tabs {
+  background-color: #2e2e2e !important;
+  z-index: 998 !important;
+}
+
+.tabs-ios {
+  background: #2e2e2e !important;
+  z-index: 998 !important;
+}
+
+.toolbar-background {
+  background-color: #3f3f3f !important;
+  opacity: 0 !important;
+}
+
+.toolbar {
+  background: #3f3f3f !important;
+}
+
+.toolbar-ios {
+  background: #3f3f3f !important;
+}
+
 h1 {
   color: $text-color !important;
   font-weight: 500 !important;
@@ -81,7 +114,9 @@ p {
 }
 
 .tabbar {
-  background: $background-color !important;
+  background: #2e2e2e !important;
+  z-index: 998 !important;
+  
 }
 
 .tabs-md .tab-button[aria-selected=true] {
@@ -90,15 +125,21 @@ p {
 
 .tabs-md .tab-button[aria-selected=false] {
   color: $text-color !important;
+  z-index: 998 !important;
 }
 
 .tab-button-icon {
-  color: #2e2e2e !important;
+  color: #fefefe !important;
+  z-index: 998 !important;
 }
 
 // Centers items horizontally
 .center {
   text-align: center;
+}
+
+.center-vert {
+  padding: 6px 0;
 }
 
 // Places items at the bottom of the screen

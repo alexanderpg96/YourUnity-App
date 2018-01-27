@@ -3,19 +3,16 @@
 
 
 <ion-content>
+  <!-- <button ion-button (click)="startExternalMap()">Open in Maps</button> -->
+  <div *ngIf="ios; then iosMap else googleMap"></div>
 
-  <div class="item-detail" (swipedown)="swipeEvent($event)">
-    <h1 class="center">{{ this.event.name }}</h1>
-    <h2 class="center">{{this.event.organization}}</h2>
-  </div>
-  <img [src]="this.event.cat_image">
-  <div class="item-detail text">
-    <p>{{this.event.content}}</p>
-  </div>
+  <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{latitude}},{{longitude}}">{{distance}} mi</a></ng-template>
+  <ng-template #googleMap><a button href="http://maps.google.com?q={{latitude}},{{longitude}}">Google Map</a></ng-template>
+  
 </ion-content>
 
 <div class="bottom-tab">
     <div class="tab-icon active"><ion-icon name='leaf'></ion-icon><div class="tab-text">Environment</div></div>
     <div class="tab-icon"><ion-icon name='calendar'></ion-icon><div class="tab-text">05 Nov</div></div>
     <div class="tab-icon"><ion-icon name='pin'></ion-icon><div class="tab-text">1.7 mi</div></div>
-  </div>
+</div>
