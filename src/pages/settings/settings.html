@@ -8,12 +8,17 @@
 
 <ion-content>
 
-  <ion-list>
+  <ion-list class="item-borderless">
 
     <ion-item>
-        <ion-label color="primary" floating>Name</ion-label>
-        <ion-input [(ngModel)]="account.name"></ion-input>
+        <ion-label color="primary" floating>First Name</ion-label>
+        <ion-input [(ngModel)]="account.name_first"></ion-input>
     </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Last Name</ion-label>
+      <ion-input [(ngModel)]="account.name_last"></ion-input>
+  </ion-item>
 
     <ion-item>
         <ion-label color="primary" floating>{{ user.email }}</ion-label>
@@ -26,11 +31,11 @@
     </ion-item> -->
 
     <ion-item>
-        <a href="">Change password</a>
+        <a href="" class="change_pass" (click)="logout()">Logout</a>
     </ion-item>
 
   </ion-list>
 
-  <button ion-button color="primary" block (click)='updateUser()'>Save Changes</button>
+  <button ion-button color="primary" block (click)='updateUser()' class="button">Save Changes</button>
 
 </ion-content>

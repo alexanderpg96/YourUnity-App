@@ -6,14 +6,19 @@
 
 
 <ion-content>
-  <div class="center larger">{{ 'SIGNUP_TITLE' | translate }}</div>
+  <div class="larger">{{ 'SIGNUP_TITLE' | translate }}</div>
 
   <form class="signup-form" (submit)="doSignup()">
     <ion-list>
 
       <div class="input-field">
-        <ion-label fixed>{{ 'NAME' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="account.name" name="name"></ion-input>
+        <ion-label fixed>First Name</ion-label>
+        <ion-input type="text" [(ngModel)]="account.name_first" name="name_first"></ion-input>
+      </div>
+
+      <div class="input-field">
+        <ion-label fixed>Last Name</ion-label>
+        <ion-input type="text" [(ngModel)]="account.name_last" name="name_last"></ion-input>
       </div>
 
       <div class="input-field">

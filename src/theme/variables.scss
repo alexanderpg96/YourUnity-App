@@ -45,7 +45,8 @@ $colors: (
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
-
+$searchbar-md-input-text-color: #ccc;
+$searchbar-ios-input-placeholder-color: #ccc;
 
 
 // App Material Design Variables
@@ -70,6 +71,10 @@ $colors: (
 // default are overridden.
 
 @import "ionic.theme.default";
+
+h3 {
+  color: #efefef !important;
+}
 
 .tabs {
   background-color: #2e2e2e !important;
@@ -111,7 +116,7 @@ p {
 .tabbar {
   background: #2e2e2e !important;
   z-index: 998 !important;
-  height: 70px;
+  
 }
 
 .tabs-md .tab-button[aria-selected=true] {

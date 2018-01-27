@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { Searchbar } from 'ionic-angular';
 import { IonicPage, NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
@@ -6,6 +8,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import firebase from 'firebase';
@@ -16,40 +19,78 @@ import firebase from 'firebase';
   templateUrl: 'cards.html'
 })
 export class CardsPage {
+  @ViewChild('topSearch') searchbar: Searchbar;
+
   cardItems: any[];
+
   eventOpened: Boolean = false;
+
   isRegister: Boolean = true;
+
   user = firebase.auth().currentUser;
+
   ios: Boolean;
+
   latitude : any;
   longitude : any;
   userLat: any;
   userLong: any;
   distance: number;
 
-  constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder) {
-    this.http.get('https://yourunity-dev.dev/api/events/').map(res => res.json()).subscribe(data => {
-      this.cardItems = data;
-      
-      for(var i = 0; i < this.cardItems.length; i++) {
-        var item = this.cardItems[i];
+  searched: Boolean = false;
 
-        this.nativeGeocoder.forwardGeocode(item.location).then((coordinates: NativeGeocoderForwardResult) => {
-          item.latitude = coordinates.latitude;
-          item.longitude = coordinates.longitude;
-        }).catch((error: any) => console.log(error));
+  baseUrl: string = 'https://yourunity.org';
 
-        item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
-      }
-    });
-
+  constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
     if (this.platform.is('ios')) {
       this.ios = true;
     }
     else {
       this.ios = false;
     }
+  }
 
+  ionViewDidLoad() {
+    this.pullEvents();
+  }
+
+  pullEvents() {
+    this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
+      this.cardItems = data;
+      console.log(this.cardItems);
+
+      this.geolocation.getCurrentPosition().then((resp) => {
+        this.userLat = resp.coords.latitude;
+        this.userLong = resp.coords.longitude;
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
+
+      for(var i = 0; i < this.cardItems.length; i++) {
+        var item = this.cardItems[i];
+        this.storage.get(item.id.toString()).then((val) => {
+          if(val) {
+            this.setRegister(item, false);
+          }
+          else {
+            this.setRegister(item, true);
+          }      
+        }); 
+      }
+
+      this.calculateCoords(this.cardItems);
+    });
+
+    console.log("Lat: " + this.userLat);
+    console.log("Long: " + this.userLong);
+  }
+
+  calculateCoords(cardItems) {
+    for(var i = 0; i < this.cardItems.length; i++) {
+      var item = this.cardItems[i];
+
+      item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
+    }
   }
 
   calculateDistance(lat1:number,lat2:number,long1:number,long2:number){
@@ -62,8 +103,8 @@ export class CardsPage {
   }
 
   register(item) {
-    var user_id = this.user.uid;
-    var url = 'https://yourunity-dev.dev/api/register_event';
+    var user_id = firebase.auth().currentUser.uid;
+    var url = this.baseUrl + '/api/register_event';
     var data = {
       "event_id" : item.id,
       "firedb_id" : user_id,
@@ -82,7 +123,7 @@ export class CardsPage {
       console.log(data)
     );
 
-    console.log("uploaded");
+    console.log("Registration completed");
 
     item.isRegister = false;
 
@@ -102,9 +143,9 @@ export class CardsPage {
     item.eventOpened = !item.eventOpened;
     this.eventOpened = !this.eventOpened;
 
-    // this.navCtrl.push('EventDetailPage', {
-    //   event: event
-    // });
+    console.log();
+    console.log(item.latitude);
+    console.log(item.longitude);
   }
 
   isOpened() {
@@ -120,7 +161,47 @@ export class CardsPage {
   }
 
   doRefresh(refresher) {
-    this.http.get('https://yourunity-dev.dev/api/events').map(res => res.json()).subscribe(data => {
+    this.pullEvents();
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 700);
+  }
+
+  private setRegister(item, isIt) {
+    console.log("Function called on ID " + item.id + ", isRegistered = " + isIt);
+    item.isRegister = isIt;
+    console.log(item.isRegister);
+  }
+
+  getEvents(event) {
+    var q = event.srcElement.value; // the query
+
+    if(!q) {
+      return;
+    }
+
+    this.cardItems = this.cardItems.filter((v) => {
+      if((v.event_name && q)) {
+        if(v.event_name.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+          this.searched = true;
+          console.log(this.searched);
+          return true;
+        }
+        return false;
+      }
+    });
+
+    
+  }
+
+  resetSearch() {
+    this.searched = false;
+
+    this.searchbar.clearInput(null);
+
+    this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
       this.cardItems = data;
       
       for(var i = 0; i < this.cardItems.length; i++) {
@@ -133,25 +214,13 @@ export class CardsPage {
             this.setRegister(item, true);
           }      
         }); 
-
-        this.nativeGeocoder.forwardGeocode(item.location).then((coordinates: NativeGeocoderForwardResult) => {
-          item.latitude = coordinates.latitude;
-          item.longitude = coordinates.longitude;
-        }).catch((error: any) => console.log(error));
-
-        item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
       }
-    });
 
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 700);
+      this.calculateCoords(this.cardItems);
+    });
   }
 
-  private setRegister(item, isIt) {
-    console.log("Function called on ID " + item.id + ", value = " + isIt);
-    item.isRegister = isIt;
-    console.log(item.isRegister);
+  isSearched() {
+    return this.searched;
   }
 }

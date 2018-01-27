@@ -36,31 +36,44 @@ export class LoginPage {
 
   // Attempt to login in through our User service
   doLogin() {
+    if (firebase.auth().currentUser) {
+      firebase.auth().signOut();
+    } 
+    else {
+      var email = this.account.email;
+      var password = this.account.password;
+      if (email.length < 6) {
+        alert('Please enter an email address.');
+        return;
+      }
+      if (password.length < 1) {
+        alert('Please enter a password.');
+        return;
+      }
+      firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          alert('Could not verify username or password, please try again.');
+          return;
+        } 
+        else if (errorCode === 'auth/user-not-found') {
+          alert('Could not verify username or password, please try again.');
+          return;
+        }  
+        else {
+          alert(errorMessage);
+          return;
+        }
+        //console.log(error);
+      });
+    }
 
-    firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-
-      //alert(errorCode + ": " + errorMessage)
-    });
 
     firebase.auth().onAuthStateChanged(user => {
       if(user) {
-        this.navCtrl.push(MainPage);
+        this.navCtrl.setRoot(MainPage);
       }
     });
-
-    // this.user.login(this.account).subscribe((resp) => {
-    //   this.navCtrl.push(MainPage);
-    // }, (err) => {
-    //   // Unable to log in
-    //   let toast = this.toastCtrl.create({
-    //     message: this.loginErrorString,
-    //     duration: 3000,
-    //     position: 'top'
-    //   });
-    //   toast.present();
-    // });
   }
 }

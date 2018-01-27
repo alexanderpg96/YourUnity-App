@@ -9,6 +9,14 @@
 
 <ion-content [ngClass]="{noScroll: isOpened()}">
 
+  <h2 class="page-title">All Events</h2>
+
+  <ion-searchbar #topSearch (change)="getEvents($event)"></ion-searchbar>
+
+  <button item-right (click)='resetSearch()' class="search-button" [ngClass]="{hide: !isSearched()}">
+    <ion-icon name="refresh-circle-outline" class="search"></ion-icon>
+  </button>
+
   <ion-refresher (ionRefresh)="doRefresh($event);">
 
     <ion-refresher-content>
@@ -48,8 +56,18 @@
     <ion-row>
       <ion-col class="col-border">
         <button ion-button color="light" clear small icon-start class="override-button">
-            <!-- <ion-icon name='thumbs-up'></ion-icon> -->
-            <ion-icon name='leaf'></ion-icon>
+            <div *ngIf="item.type_id === 1"><ion-icon name='paw'></ion-icon></div>
+            <div *ngIf="item.type_id === 2"><ion-icon name='school'></ion-icon></div>
+            <div *ngIf="item.type_id === 3"><ion-icon name='glasses'></ion-icon></div>
+            <div *ngIf="item.type_id === 4"><ion-icon name='leaf'></ion-icon></div>
+            <div *ngIf="item.type_id === 5"><ion-icon name='restaurant'></ion-icon></div>
+            <div *ngIf="item.type_id === 6"><ion-icon name='home'></ion-icon></div>
+            <div *ngIf="item.type_id === 7"><ion-icon name='body'></ion-icon></div>
+            <div *ngIf="item.type_id === 8"><ion-icon name='people'></ion-icon></div>
+            <div *ngIf="item.type_id === 9"><ion-icon name='brush'></ion-icon></div>
+            <div *ngIf="item.type_id === 10"><ion-icon name='laptop'></ion-icon></div>
+            <div *ngIf="item.type_id === 11"><ion-icon name='happy'></ion-icon></div>
+            <div *ngIf="item.type_id === 12"><ion-icon name='list-box'></ion-icon></div>
           </button>
       </ion-col>
       <ion-col class="col-border">
@@ -60,8 +78,8 @@
       </ion-col>
       <ion-col class="col-border">
           <div *ngIf="ios; then iosMap else googleMap"></div>
-          <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{latitude}},{{longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> 1.7 mi</span></div></a></ng-template>
-          <ng-template #googleMap><a button href="http://maps.google.com?q={{latitude}},{{longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> 1.7 mi</span></div></a></ng-template>
+          <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+          <ng-template #googleMap><a button href="http://maps.google.com?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
           <!-- <button ion-button color="light" clear small icon-start center class="override-button" (click)="startExternalMap()">
               <div class="center"><ion-icon name='pin'></ion-icon><span class="col-text">1.7 mi</span></div>
           </button> -->

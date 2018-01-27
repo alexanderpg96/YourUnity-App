@@ -4,6 +4,10 @@ page-cards {
     //     margin-top: 45px !important;
     // }
 
+    ion-refresher {
+        margin-top: 20px;
+    }
+
     a {
         color: #efefef !important;
         text-decoration: none;
@@ -21,6 +25,10 @@ page-cards {
         opacity: 0.2;
     }
 
+    .page-title {
+        padding-top: 20px !important;
+    }
+
     .closed {
         position: relative;
         height: 0px;
@@ -35,10 +43,14 @@ page-cards {
         display: flex;
         flex-flow: column;
         height: 85%;
-        top: 0;
+        top: 15px;
         left: 0;
         z-index: 999;
         transition: 0.2s;
+    }
+
+    .hide {
+        display: none;
     }
 
     .open {
@@ -92,7 +104,10 @@ page-cards {
     }
     
     h2 {
+        font-size: 26pt !important;
         color: $text-color !important;
+        font-weight: 600 !important;
+        margin-left: 14px;
     }
     
     .card-content p {
@@ -142,6 +157,20 @@ page-cards {
 
     ion-icon {
         font-size: 2.4rem !important;
+        color: #efefef !important;
+    }
+
+    .search {
+        font-size: 3.6rem !important;
+        float: right;
+        color: #6bbaa7 !important;
+    }
+
+    .search-button {
+        position: absolute;
+        top: 18px;
+        right: 13px;
+        background: #3f3f3f;
     }
 
     .col-text {
@@ -158,6 +187,21 @@ page-cards {
     
     .no-overflow {
         width: 100%;
+    }
+
+    .searchbar {
+        background: #3f3f3f !important;
+    }
+
+    .searchbar-ios .searchbar-input {
+        background: #2e2e2e !important;
+        padding: 25px !important;
+        font-size: 15pt;
+        color: #fff;
+    }
+
+    .searchbar-ios.searchbar-left-aligned .searchbar-search-icon {
+        opacity: 0;
     }
 
 }

@@ -1,12 +1,11 @@
 page-signup {
-    padding-top: 5%;
 
     .signup-form {
-        margin-top: 10%;
+        margin-top: 5%;
     }
     
     .input-field {
-        font-size: 16pt;
+        font-size: 14pt;
         margin-bottom: 7%;
     }
     
@@ -15,29 +14,27 @@ page-signup {
         width: 90%;
         margin-left: 5%;
         border-radius: 4px;
-        padding: 7px;
+        padding: 2px;
     }
     
     .input-field ion-label {
         margin-left: 6%;
         font-weight: 500;
-        font-size: 1.8rem;
+        font-size: 16pt;
         margin-bottom: 8px;
+        width: 100%;
     }
     
     .larger {
-        font-size: 2.8rem;
-        font-weight: 300;
+        font-size: 26pt !important;
+        font-weight: 500 !important;
+        margin-left: 14px;
     }
     
     .button {
-        height: 70px !important;
+        height: 60px !important;
         font-weight: 400;
         font-size: 2.4rem;
-    }
-
-    .larger {
-        font-size: 4rem !important;
     }
 
     ion-label {

@@ -27,10 +27,13 @@ export class SettingsPage {
   
   user = firebase.auth().currentUser;
 
-  account: { email: string, name: string } =  {
+  account: { email: string, name_first: string, name_last: string } =  {
    email: this.user.email,
-   name:  this.user.displayName
+   name_first:  "First name",
+   name_last: "Last name"
   };
+
+  baseUrl: string = 'https://yourunity.org';
 
   constructor(public navCtrl: NavController, public settings: Settings, public navParams: NavParams, public http: Http) {
     
@@ -57,7 +60,7 @@ export class SettingsPage {
     });
 
     this.user.updateProfile({
-      displayName: this.account.name,
+      displayName: this.account.name_first + " " + this.account.name_last,
       photoURL: ""
     }).then(function() {
       // Update successful.
@@ -68,9 +71,10 @@ export class SettingsPage {
     });
 
     var user_id = this.user.uid;
-      var url = 'https://yourunity-dev.dev/api/add_attendee/' + user_id;
+      var url = this.baseUrl + '/api/add_attendee/' + user_id;
       var data = {
-        "name" : this.account.name,
+        "name_first" : this.account.name_first,
+        "name_last" : this.account.name_last,
         "avatar" : "default.jpg",
         "email" : this.account.email
       };
@@ -87,5 +91,9 @@ export class SettingsPage {
 
       console.log("uploaded");
       _this.navCtrl.pop();
+  }
+
+  logout() {
+    firebase.auth().signOut();
   }
 }
