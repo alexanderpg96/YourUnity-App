@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { Searchbar } from 'ionic-angular';
+import { Searchbar, App } from 'ionic-angular';
 import { IonicPage, NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
@@ -12,6 +12,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import firebase from 'firebase';
+import { MainPage, FirstRunPage } from '../pages';
 
 @IonicPage()
 @Component({
@@ -41,7 +42,15 @@ export class CardsPage {
 
   baseUrl: string = 'https://yourunity.org';
 
-  constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
+  constructor(public app: App, public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
+    
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.userLat = resp.coords.latitude;
+      this.userLong = resp.coords.longitude;
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+    
     if (this.platform.is('ios')) {
       this.ios = true;
     }
@@ -52,19 +61,23 @@ export class CardsPage {
 
   ionViewDidLoad() {
     this.pullEvents();
+    
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.userLat = resp.coords.latitude;
+      this.userLong = resp.coords.longitude;
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+  }
+
+  goToWelcome() {
+    this.navCtrl.setRoot(MainPage);
   }
 
   pullEvents() {
     this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
       this.cardItems = data;
       console.log(this.cardItems);
-
-      this.geolocation.getCurrentPosition().then((resp) => {
-        this.userLat = resp.coords.latitude;
-        this.userLong = resp.coords.longitude;
-       }).catch((error) => {
-         console.log('Error getting location', error);
-       });
 
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
@@ -89,7 +102,7 @@ export class CardsPage {
     for(var i = 0; i < this.cardItems.length; i++) {
       var item = this.cardItems[i];
 
-      item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
+      item.distance = this.calculateDistance(this.userLat, item[0].latitude, this.userLong, item[0].longitude);
     }
   }
 
@@ -105,19 +118,19 @@ export class CardsPage {
   register(item) {
     var user_id = firebase.auth().currentUser.uid;
     var url = this.baseUrl + '/api/register_event';
-    var data = {
-      "event_id" : item.id,
-      "firedb_id" : user_id,
-      "check_in_time" : 0,
-      "duration" : 0,
-      "activity_status" : 2
-    };
+    var data =
+      "event_id=" +  item.id +
+      "&user_id=" + item.user_id +
+      "&firedb_id=" + user_id +
+      "&check_in_time=" + 0 +
+      "&duration=" + 0 +
+      "&activity_status=" + 2;
 
-    let headers = new Headers ({ 'Content-Type': 'application/json' });
+    let headers = new Headers ({ 'Content-Type': 'application/x-www-form-urlencoded' });
     let options = new RequestOptions({ headers: headers }); 
 
     // Check in user on server
-    this.http.post(url, JSON.stringify(data), options)
+    this.http.post(url, data, options)
     .map(res => res.json())
     .subscribe(data =>
       console.log(data)
@@ -144,8 +157,8 @@ export class CardsPage {
     this.eventOpened = !this.eventOpened;
 
     console.log();
-    console.log(item.latitude);
-    console.log(item.longitude);
+    console.log(item[0].latitude);
+    console.log(item[0].longitude);
   }
 
   isOpened() {
@@ -201,23 +214,7 @@ export class CardsPage {
 
     this.searchbar.clearInput(null);
 
-    this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
-      this.cardItems = data;
-      
-      for(var i = 0; i < this.cardItems.length; i++) {
-        var item = this.cardItems[i];
-        this.storage.get(item.id.toString()).then((val) => {
-          if(val) {
-            this.setRegister(item, false);
-          }
-          else {
-            this.setRegister(item, true);
-          }      
-        }); 
-      }
-
-      this.calculateCoords(this.cardItems);
-    });
+    this.pullEvents();
   }
 
   isSearched() {

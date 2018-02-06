@@ -8,21 +8,21 @@
 <ion-content>
   <div class="center larger">{{ 'LOGIN_TITLE' | translate }}</div>
 
-  <form class="login-form" (submit)="doLogin()">
+  <form class="login-form">
     <ion-list>
 
       <div class="input-field">
         <ion-label fixed>{{ 'EMAIL' | translate }}</ion-label>
-        <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>
+        <ion-input type="email" [(ngModel)]="account.email" placeholder="Email" name="email"></ion-input>
       </div>
 
       <div class="input-field">
         <ion-label fixed>{{ 'PASSWORD' | translate }}</ion-label>
-        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
+        <ion-input type="password" [(ngModel)]="account.password" placeholder="Password" name="password"></ion-input>
       </div>
 
       <div class="bottom" padding>
-        <button ion-button color="primary" block>{{ 'LOGIN_BUTTON' | translate }}</button>
+        <button ion-button color="primary" block (click)="doLogin()">{{ 'LOGIN_BUTTON' | translate }}</button>
       </div>
 
     </ion-list>

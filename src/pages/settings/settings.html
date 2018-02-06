@@ -11,18 +11,18 @@
   <ion-list class="item-borderless">
 
     <ion-item>
-        <ion-label color="primary" floating>First Name</ion-label>
-        <ion-input [(ngModel)]="account.name_first"></ion-input>
+        <ion-label color="primary" stacked>First Name</ion-label>
+        <ion-input [(ngModel)]="account.name_first" placeholder="First Name"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label color="primary" floating>Last Name</ion-label>
-      <ion-input [(ngModel)]="account.name_last"></ion-input>
+      <ion-label color="primary" stacked>Last Name</ion-label>
+      <ion-input [(ngModel)]="account.name_last" placeholder="Last Name"></ion-input>
   </ion-item>
 
     <ion-item>
-        <ion-label color="primary" floating>{{ user.email }}</ion-label>
-        <ion-input [(ngModel)]="account.email"></ion-input>
+        <ion-label color="primary" stacked>{{ user.email }}</ion-label>
+        <ion-input [(ngModel)]="account.email" placeholder="Email"></ion-input>
     </ion-item>
 
     <!-- <ion-item>

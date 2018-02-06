@@ -28,9 +28,9 @@ export class SettingsPage {
   user = firebase.auth().currentUser;
 
   account: { email: string, name_first: string, name_last: string } =  {
-   email: this.user.email,
-   name_first:  "First name",
-   name_last: "Last name"
+   email: "",
+   name_first:  "",
+   name_last: ""
   };
 
   baseUrl: string = 'https://yourunity.org';
@@ -60,30 +60,31 @@ export class SettingsPage {
     });
 
     this.user.updateProfile({
-      displayName: this.account.name_first + " " + this.account.name_last,
+      displayName: this.account.name_first,
       photoURL: ""
-    }).then(function() {
-      // Update successful.
-      console.log("Info changed");
-    }).catch(function(error) {
+    }).then(this.pushUpdate())
+    .catch(function(error) {
       console.log("Info not changed");
       console.log(error);
     });
+  }
 
+  pushUpdate() {
     var user_id = this.user.uid;
-      var url = this.baseUrl + '/api/add_attendee/' + user_id;
-      var data = {
-        "name_first" : this.account.name_first,
-        "name_last" : this.account.name_last,
-        "avatar" : "default.jpg",
-        "email" : this.account.email
-      };
+      var url = this.baseUrl + '/api/update_attendee';
+      var data = 
+        "firedb_id=" + user_id +
+        "&name_first=" + this.account.name_first +
+        "&name_last=" + this.account.name_last +
+        "&email=" + this.account.email;
 
-      let headers = new Headers ({ 'Content-Type': 'application/json' });
-      let options = new RequestOptions({ headers: headers }); 
+      var mdata = "name_first=Test&name_last=Test&firedb_id=1234567";
+
+        let headers = new Headers ({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        let options = new RequestOptions({ headers: headers }); 
 
       // Check in user on server
-      this.http.patch(url, JSON.stringify(data), options)
+      this.http.post(url, data, options)
       .map(res => res.json())
       .subscribe(data =>
         console.log(data)
@@ -91,6 +92,9 @@ export class SettingsPage {
 
       console.log("uploaded");
       _this.navCtrl.pop();
+
+      var hello: any = "hello";
+      return hello;
   }
 
   logout() {

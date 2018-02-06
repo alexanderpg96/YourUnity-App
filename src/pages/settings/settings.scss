@@ -43,6 +43,11 @@ page-settings {
         padding: 15px;
         background: #2e2e2e;
         border-radius: 5px;
+        font-size: 14pt;
+    }
+
+    ion-label[stacked] {
+        font-size: 14pt !important;
     }
 
     .change_pass {

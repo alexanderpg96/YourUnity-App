@@ -37,7 +37,7 @@ export class WelcomePage {
   }
 
   goToMain() {
-    this.navCtrl.push(MainPage);
+    this.navCtrl.setRoot(MainPage);
   }
 
   login() {

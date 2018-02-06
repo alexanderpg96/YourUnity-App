@@ -23,7 +23,8 @@ export class ContentPage {
   numEvents = 0;
   time = 0;
 
-  cardItems: any[];
+  cardItems: any[] = [];
+  dataItems: any[];
   opened: Boolean = false;
   isInEnabled: Boolean = false;
   isOutEnabled: Boolean = false;
@@ -39,19 +40,6 @@ export class ContentPage {
   baseUrl: string = 'https://yourunity.org';
 
   constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) { 
-    this.http.get(this.baseUrl + '/api/user/' + this.user.uid).map(res => res.json()).subscribe(data => {
-      for(var i = 0; i < data.length; i++) {
-        if(data[i].activity_status === 0) {
-          this.numEvents++;
-          this.time += data[i].duration;
-        }
-      }
-
-      this.time = Math.round( ((this.time)/3600) * 10 ) / 10;
-
-      console.log(this.numEvents);
-      console.log(this.time);
-    });
 
     // Getting user events
 
@@ -67,17 +55,24 @@ export class ContentPage {
 
   ionViewDidLoad() {
     this.getUserLocation();
+    //this.storage.clear();
   }
 
   pullEvents() {
+    this.cardItems = [];
     this.http.get(this.baseUrl + '/api/user_events/' + this.user.uid).map(res => res.json()).subscribe(data => {
-      this.cardItems = data;
+      this.dataItems = data;
+
+      this.numEvents = this.dataItems[this.dataItems.length-2];
+      this.time = this.dataItems[this.dataItems.length-1];
+
+      for(var i = 0; i < this.dataItems.length - 2; i++) {
+        this.cardItems.push(this.dataItems[i]);
+      }
       
       for(var i = 0; i < this.cardItems.length; i++) {
-        if(this.cardItems[i].activity_status === 0) {
-          this.numEvents++;
-          this.time += this.cardItems[i].duration;
-        }
+
+        this.time = Math.round( ((this.time)/3600) * 10 ) / 10;
 
         var item = this.cardItems[i];
 
@@ -102,7 +97,7 @@ export class ContentPage {
           item.isOutEnabled = false;
         }
 
-        item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
+        item.distance = this.calculateDistance(this.userLat, item[0].latitude, this.userLong, item[0].longitude);
       }
       console.log(this.cardItems);
       console.log(this.user.uid);
@@ -175,77 +170,89 @@ export class ContentPage {
   }
 
   checkIn(item) {
-    var user_id = this.user.uid;
-    var url = this.baseUrl + '/api/checkin/' + user_id + '/' + item.id;
-    var checkinTime = Math.round((new Date()).getTime() / 1000)
-    var data = {
-      "check_in_time" : Math.round((new Date()).getTime() / 1000),
-      "duration" : 0,
-      "activity_status" : 1
-    };
-    let headers = new Headers ({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers }); 
-
-    // Check in user on server
-    this.http.patch(url, JSON.stringify(data), options)
-    .map(res => res.json())
-    .subscribe(data =>
-      console.log(data)
-    );
-
-    console.log("Checked in");
-
-    item.isInEnabled = false;
-    item.isOutEnabled = true;
-
-    var key = item.id.toString() + "_check";
-    this.storage.set(key, checkinTime);
-    this.storage.get(key).then((val) => {console.log(val)});
-  }
-
-  checkOut(item) {
-    var key = item.id.toString() + "_check";
-    var duration = Math.round((new Date()).getTime() / 1000);
-
-    this.storage.get(key).then((checkin) => {
-      duration = duration - checkin;
+    if(item.distance < 0.2) {
       var user_id = this.user.uid;
-      var url = this.baseUrl + '/api/checkin/' + user_id + '/' + item.id;
-      var data = {
-        "check_in_time" : checkin,
-        "duration" : duration,
-        "activity_status" : 0
-      };
-      let headers = new Headers ({ 'Content-Type': 'application/json' });
+      var url = this.baseUrl + '/api/check';
+      var checkinTime = Math.round((new Date()).getTime() / 1000)
+      var data =
+        "check_in_time=" + Math.round((new Date()).getTime() / 1000) +
+        "&duration=" + 0 +
+        "&activity_status=" + 1 +
+        "&firedb_id=" + user_id +
+        "&event_id=" + item.id;
+      let headers = new Headers ({ 'Content-Type': 'application/x-www-form-urlencoded' });
       let options = new RequestOptions({ headers: headers }); 
-        
+
       // Check in user on server
-      this.http.patch(url, JSON.stringify(data), options)
+      this.http.post(url, data, options)
       .map(res => res.json())
       .subscribe(data =>
         console.log(data)
       );
 
-      console.log("Checked out");
-      console.log(data);
+      console.log("Checked in");
 
       item.isInEnabled = false;
-      item.isOutEnabled = false;
+      item.isOutEnabled = true;
 
-      if(duration < 60) {
-        alert("Thanks for volunteering! You volunteered for " + duration + " seconds!");
-      }
-      else if(duration < 3600) {
-        alert("Thanks for volunteering! You volunteered for " + (duration/60) + " minutes!");
-      }
-      else {
-        alert("Thanks for volunteering! You volunteered for " + (duration/3600) + " hours!");
-      }
+      var key = item.id.toString() + "_check";
+      this.storage.set(key, checkinTime);
+      this.storage.get(key).then((val) => {console.log(val)});
+    }
+    else {
+      alert("You are not close enough to the event. Please move closer.")
+    }
+  }
+
+  checkOut(item) {
+    if(item.distance < 0.2) {
+      var key = item.id.toString() + "_check";
+      var duration = Math.round((new Date()).getTime() / 1000);
+
+      this.storage.get(key).then((checkin) => {
+        duration = duration - checkin;
+        var user_id = this.user.uid;
+        var url = this.baseUrl + '/api/check';
+        var data =
+          "check_in_time=" + checkin +
+          "&duration=" + duration +
+          "&activity_status=" + 0 +
+          "&firedb_id=" + user_id +
+          "&event_id=" + item.id;
+        let headers = new Headers ({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        let options = new RequestOptions({ headers: headers }); 
+          
+        // Check in user on server
+        this.http.post(url, data, options)
+        .map(res => res.json())
+        .subscribe(data =>
+          console.log(data)
+        );
+
+        console.log("Checked out");
+        console.log(data);
+
+        item.isInEnabled = false;
+        item.isOutEnabled = false;
+
+        if(duration < 60) {
+          alert("Thanks for volunteering! You volunteered for " + duration + " seconds!");
+        }
+        else if(duration < 3600) {
+          alert("Thanks for volunteering! You volunteered for " + (duration/60) + " minutes!");
+        }
+        else {
+          alert("Thanks for volunteering! You volunteered for " + (duration/3600) + " hours!");
+        }
+        
+      });
       
-    });
-    
-    var key = item.id.toString() + "_check";
-    this.storage.remove(key);
+      var key = item.id.toString() + "_check";
+      this.storage.remove(key);
+    }
+    else {
+      alert("You are not close enough to the event. Please move closer.")
+    }
   }
 
 }

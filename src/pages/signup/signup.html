@@ -13,22 +13,22 @@
 
       <div class="input-field">
         <ion-label fixed>First Name</ion-label>
-        <ion-input type="text" [(ngModel)]="account.name_first" name="name_first"></ion-input>
+        <ion-input type="text" [(ngModel)]="account.name_first" placeholder="First Name" name="name_first"></ion-input>
       </div>
 
       <div class="input-field">
         <ion-label fixed>Last Name</ion-label>
-        <ion-input type="text" [(ngModel)]="account.name_last" name="name_last"></ion-input>
+        <ion-input type="text" [(ngModel)]="account.name_last" placeholder="Last Name" name="name_last"></ion-input>
       </div>
 
       <div class="input-field">
         <ion-label fixed>{{ 'EMAIL' | translate }}</ion-label>
-        <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>
+        <ion-input type="email" [(ngModel)]="account.email" placeholder="Email" name="email"></ion-input>
       </div>
   
       <div class="input-field">
         <ion-label fixed>{{ 'PASSWORD' | translate }}</ion-label>
-        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
+        <ion-input type="password" [(ngModel)]="account.password" placeholder="Password" name="password"></ion-input>
       </div>
 
       <div class="bottom" padding>
