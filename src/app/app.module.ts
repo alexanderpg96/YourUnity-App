@@ -12,6 +12,8 @@ import { HttpModule } from '@angular/http';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import { Keyboard } from '@ionic-native/keyboard';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
@@ -20,6 +22,7 @@ import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
 
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { EventPage } from '../pages/event/event';
 
 
 // Gesture support
@@ -58,7 +61,8 @@ export function provideSettings(storage: Storage) {
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+    EventPage
   ],
   imports: [
     BrowserModule,
@@ -73,13 +77,16 @@ export function provideSettings(storage: Storage) {
     }),
     IonicModule.forRoot(MyApp, {
       tabsHideOnSubPages: true,
-      //statusBarPadding: false,
+      //scrollPadding: false,
+      //scrollAssist: true,
+      //autoFocusAssist: false
     }),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    EventPage
   ],
   providers: [
     Api,
@@ -88,7 +95,9 @@ export function provideSettings(storage: Storage) {
     GoogleMaps,
     Geolocation,
     NativeGeocoder,
+    InAppBrowser,
     Camera,
+    Keyboard,
     SplashScreen,
     StatusBar,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },

@@ -10,17 +10,19 @@ import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import {DomSanitizer} from '@angular/platform-browser'
 
 import firebase from 'firebase';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 // import { Items } from '../../providers/providers';
 
 @IonicPage()
 @Component({
-  selector: 'page-event-detail',
-  templateUrl: 'event-detail.html'
+  selector: 'page-event',
+  templateUrl: 'event.html'
 })
-export class EventDetailPage {
+export class EventPage {
   item: any;
   isRegister: Boolean = true;
 
@@ -38,7 +40,7 @@ export class EventDetailPage {
 
   baseUrl: string = 'https://yourunity.org';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
+  constructor(public sanitizer: DomSanitizer, public iab: InAppBrowser, public navCtrl: NavController, public navParams: NavParams, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.userLat = resp.coords.latitude;
       this.userLong = resp.coords.longitude;
@@ -47,6 +49,7 @@ export class EventDetailPage {
     });
 
      this.item = navParams.get("eventDetails");
+     this.item.event_description = this.linkify(this.item.event_description);
     
     if (this.platform.is('ios')) {
       this.ios = true;
@@ -124,17 +127,17 @@ export class EventDetailPage {
 
     //URLs starting with http://, https://, or ftp://
     replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    replacedText = inputText.replace(replacePattern1, '<a onclick="openExternal(\'$1\')">$1</a>');
 
     //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
     replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    replacedText = replacedText.replace(replacePattern2, '$1<a onclick="openExternal(\'http://$2\')">$2</a>');
 
     //Change email addresses to mailto:: links.
     replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
     replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
 
-    return replacedText;
+    return this.sanitizer.bypassSecurityTrustHtml(replacedText);
   }
 
 }

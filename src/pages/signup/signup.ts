@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, Alert, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
-import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import {Headers, RequestOptions} from '@angular/http'
 import 'rxjs/add/operator/map';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 
 import firebase from "firebase";
+
+declare var navigator: any;
+declare var Connection: any;
 
 @IonicPage()
 @Component({
@@ -31,6 +35,7 @@ export class SignupPage {
   name_first: string;
   name_last: string;
   userCreated: boolean = false;
+  keyboardShow: Boolean = true;
 
   // Our translated text strings
   private signupErrorString: string;
@@ -38,16 +43,29 @@ export class SignupPage {
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService, public http: Http) {
+    private keyboard: Keyboard,
+    public translateService: TranslateService, public http: Http, private platform: Platform) {
 
     firebase.auth().signOut();
-    //console.log(firebase.auth().currentUser.uid);
+
+    keyboard.disableScroll(true);
+
+      keyboard.onKeyboardShow()
+      .subscribe(data => {
+        this.keyboardShow = false;
+       //your code goes here
+    });
+
+    keyboard.onKeyboardHide()
+      .subscribe(data => {
+        this.keyboardShow = true;
+       //your code goes here
+    });
 
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
   }
-
   doSignup() {
     // Attempt to register through Firebase
 

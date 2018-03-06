@@ -49,7 +49,8 @@ export class MyApp {
     { title: 'Settings', component: 'SettingsPage' },
     { title: 'Event Detail', component: 'EventDetailPage' },
     { title: 'Your Events', component: 'YourCardsPage' },
-    { title: 'Search', component: 'SearchPage' }
+    { title: 'Search', component: 'SearchPage' },
+    { title: 'Event', component: 'EventPage' }
   ]
 
   constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {

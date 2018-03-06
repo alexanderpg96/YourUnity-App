@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
-import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import {Headers, RequestOptions} from '@angular/http'
 import 'rxjs/add/operator/map';
 
 import { Settings } from '../../providers/providers';
@@ -27,10 +27,8 @@ export class SettingsPage {
   
   user = firebase.auth().currentUser;
 
-  account: { email: string, name_first: string, name_last: string } =  {
-   email: "",
-   name_first:  "",
-   name_last: ""
+  account: { email: string } =  {
+   email: ""
   };
 
   baseUrl: string = 'https://yourunity.org';
@@ -50,23 +48,21 @@ export class SettingsPage {
   updateUser() {
     _this = this;
 
-    this.user.updateEmail(this.account.email).then(function() {
-      // Update successful.
-      console.log("Email updated");
-    }).catch(function(error) {
-      // An error happened.
-      console.log("Email not updated");
-      console.log(error);
-    });
-
-    this.user.updateProfile({
-      displayName: this.account.name_first,
-      photoURL: ""
-    }).then(this.pushUpdate())
-    .catch(function(error) {
-      console.log("Info not changed");
-      console.log(error);
-    });
+    if(this.account.email == "") {
+      // do nothing
+      alert("Please fill in email");
+    }
+    else {
+      this.user.updateEmail(this.account.email).then(function() {
+        // Update successful.
+        console.log("Email updated");
+      }).then(this.pushUpdate())
+      .catch(function(error) {
+        // An error happened.
+        console.log("Email not updated");
+        console.log(error);
+      });
+    }
   }
 
   pushUpdate() {
@@ -74,11 +70,7 @@ export class SettingsPage {
       var url = this.baseUrl + '/api/update_attendee';
       var data = 
         "firedb_id=" + user_id +
-        "&name_first=" + this.account.name_first +
-        "&name_last=" + this.account.name_last +
         "&email=" + this.account.email;
-
-      var mdata = "name_first=Test&name_last=Test&firedb_id=1234567";
 
         let headers = new Headers ({ 'Content-Type': 'application/x-www-form-urlencoded' });
         let options = new RequestOptions({ headers: headers }); 

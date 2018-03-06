@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
-import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import {Headers, RequestOptions} from '@angular/http'
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
@@ -72,8 +72,6 @@ export class ContentPage {
       
       for(var i = 0; i < this.cardItems.length; i++) {
 
-        this.time = Math.round( ((this.time)/3600) * 10 ) / 10;
-
         var item = this.cardItems[i];
 
         // if statement to check if time has started and check status (1 = event started, 2 = not started)
@@ -99,12 +97,12 @@ export class ContentPage {
 
         item.distance = this.calculateDistance(this.userLat, item[0].latitude, this.userLong, item[0].longitude);
       }
+
+      this.time = Math.round( ((this.time)/3600) * 10 ) / 10;
+
       console.log(this.cardItems);
       console.log(this.user.uid);
     });
-
-    console.log("Lat: " + this.userLat);
-    console.log("Long: " + this.userLong);
   }
 
   getUserLocation() {

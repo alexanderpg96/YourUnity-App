@@ -5,12 +5,16 @@ page-cards {
     // }
 
     ion-refresher {
-        margin-top: 20px;
+        margin-top: 40px;
     }
 
     a {
         color: #efefef !important;
         text-decoration: none;
+    }
+
+    p a {
+        color: #6bbaa7 !important;
     }
 
     .content {

@@ -8,7 +8,6 @@
 <ion-content>
   <div class="center larger">{{ 'LOGIN_TITLE' | translate }}</div>
 
-  <form class="login-form">
     <ion-list>
 
       <div class="input-field">
@@ -21,10 +20,10 @@
         <ion-input type="password" [(ngModel)]="account.password" placeholder="Password" name="password"></ion-input>
       </div>
 
-      <div class="bottom" padding>
+      <div *ngIf="keyboardShow" class="bottom" padding>
         <button ion-button color="primary" block (click)="doLogin()">{{ 'LOGIN_BUTTON' | translate }}</button>
       </div>
 
     </ion-list>
-  </form>
+
 </ion-content>

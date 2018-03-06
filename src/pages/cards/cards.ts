@@ -3,7 +3,7 @@ import { ViewChild } from '@angular/core';
 import { Searchbar, App } from 'ionic-angular';
 import { IonicPage, NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
-import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import {Headers, RequestOptions} from '@angular/http'
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
@@ -12,7 +12,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import firebase from 'firebase';
-import { MainPage, FirstRunPage } from '../pages';
+import { MainPage } from '../pages';
+import { EventPage } from '../event/event';
 
 @IonicPage()
 @Component({
@@ -81,14 +82,6 @@ export class CardsPage {
 
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
-        this.storage.get(item.id.toString()).then((val) => {
-          if(val) {
-            this.setRegister(item, false);
-          }
-          else {
-            this.setRegister(item, true);
-          }      
-        }); 
       }
 
       this.calculateCoords(this.cardItems);
@@ -115,77 +108,22 @@ export class CardsPage {
     return dis;
   }
 
-  register(item) {
-    var user_id = firebase.auth().currentUser.uid;
-    var url = this.baseUrl + '/api/register_event';
-    var data =
-      "event_id=" +  item.id +
-      "&user_id=" + item.user_id +
-      "&firedb_id=" + user_id +
-      "&check_in_time=" + 0 +
-      "&duration=" + 0 +
-      "&activity_status=" + 2;
-
-    let headers = new Headers ({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    let options = new RequestOptions({ headers: headers }); 
-
-    // Check in user on server
-    this.http.post(url, data, options)
-    .map(res => res.json())
-    .subscribe(data =>
-      console.log(data)
-    );
-
-    console.log("Registration completed");
-
-    item.isRegister = false;
-
-    this.storage.set(item.id.toString(), "registered");
-  }
+  
 
   openEvent(item) {
-    this.storage.get(item.id.toString()).then((val) => {
-      if(val) {
-        item.isRegister = false;
-      }
-      else {
-        item.isRegister = true;
-      }      
-    }); 
-
-    item.eventOpened = !item.eventOpened;
-    this.eventOpened = !this.eventOpened;
-
-    console.log();
-    console.log(item[0].latitude);
-    console.log(item[0].longitude);
-  }
-
-  isOpened() {
-    return this.eventOpened;
-  }
-
-  isCardOpened(item) {
-    return item.eventOpened;
-  }
-
-  canRegister(item) {
-    return item.isRegister;
+    this.navCtrl.push(EventPage, {
+      eventDetails: item
+    });
   }
 
   doRefresh(refresher) {
+    this.eventOpened = false;
     this.pullEvents();
 
     setTimeout(() => {
       console.log('Async operation has ended');
       refresher.complete();
     }, 700);
-  }
-
-  private setRegister(item, isIt) {
-    console.log("Function called on ID " + item.id + ", isRegistered = " + isIt);
-    item.isRegister = isIt;
-    console.log(item.isRegister);
   }
 
   getEvents(event) {

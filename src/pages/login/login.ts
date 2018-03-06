@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
@@ -23,12 +24,26 @@ export class LoginPage {
 
   // Our translated text strings
   private loginErrorString: string;
+  keyboardShow: Boolean = true;
 
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService, private keyboard: Keyboard) {
 
+      keyboard.disableScroll(true);
+
+      keyboard.onKeyboardShow()
+      .subscribe(data => {
+        this.keyboardShow = false;
+       //your code goes here
+    });
+
+    keyboard.onKeyboardHide()
+      .subscribe(data => {
+        this.keyboardShow = true;
+       //your code goes here
+    });
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
     })

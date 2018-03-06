@@ -1,6 +1,6 @@
 {
   "name": "YourUnityApp",
-  "app_id": "",
+  "app_id": "org.yourunity.YourUnity",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
