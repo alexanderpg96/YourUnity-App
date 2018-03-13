@@ -1,13 +1,7 @@
 {
   "name": "YourUnityApp",
-  "app_id": "",
+  "app_id": "org.yourunity.YourUnity",
   "type": "ionic-angular",
-  "proxies": [
-    {
-      "path": "/api",
-      "proxyUrl": "https://yourunity-dev.dev/api"
-    }
-  ],
   "integrations": {
     "cordova": {}
   }

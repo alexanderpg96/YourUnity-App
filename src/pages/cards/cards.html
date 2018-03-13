@@ -7,7 +7,7 @@
 </ion-header>
 
 
-<ion-content [ngClass]="{noScroll: isOpened()}">
+<ion-content>
 
   <h2 class="page-title">All Events</h2>
 
@@ -25,7 +25,7 @@
     
   </ion-refresher>
 
-  <ion-card class="card" *ngFor="let item of cardItems" [ngClass]="{absolute: isCardOpened(item)}">
+  <ion-card class="card" *ngFor="let item of cardItems">
       
     <ion-item class="no-overflow" (click)="openEvent(item)">
       <!-- <ion-avatar item-start>
@@ -36,19 +36,29 @@
       <p class="time">{{item.starts * 1000 | date:'h:mm a'}} - {{item.ends * 1000 | date:'h:mm a'}}</p>
     </ion-item>
 
-    <div class="closed" [ngClass]="{open: isCardOpened(item)}">
+    <div class="closed">
 
       <div class="registerOverlay">
 
-          <img src="assets/img/eco.jpg" />
+          <div *ngIf="item.type_id === 1"><img src="assets/img/animals.jpg" /></div>
+          <div *ngIf="item.type_id === 2"><img src="assets/img/education.jpg" /></div>
+          <div *ngIf="item.type_id === 3"><img src="assets/img/aging.jpg" /></div>
+          <div *ngIf="item.type_id === 4"><img src="assets/img/environment.jpg" /></div>
+          <div *ngIf="item.type_id === 5"><img src="assets/img/food.jpg" /></div>
+          <div *ngIf="item.type_id === 6"><img src="assets/img/homeless.jpg" /></div>
+          <div *ngIf="item.type_id === 7"><img src="assets/img/humanities.jpg" /></div>
+          <div *ngIf="item.type_id === 8"><img src="assets/img/government.jpg" /></div>
+          <div *ngIf="item.type_id === 9"><img src="assets/img/museum.jpg" /></div>
+          <div *ngIf="item.type_id === 10"><img src="assets/img/technology.jpg" /></div>
+          <div *ngIf="item.type_id === 11"><img src="assets/img/youth.jpg" /></div>
+          <div *ngIf="item.type_id === 12"><img src="assets/img/yourunity.jpg" /></div>
 
-          <button ion-button outline class="registerButton" [ngClass]="{activeButton: canRegister(item)}" 
-          (click)="register(item)" 
-          [disabled]="!canRegister(item)">Register</button>
+          <button ion-button outline class="registerButton"
+          >Register</button>
 
       </div>
 
-      <p>{{ item.event_description }}</p>
+      <p [innerHTML]="item.event_description"></p>
     </div>
 
     <!-- <img [src]="item.cat_image"> -->
@@ -78,8 +88,8 @@
       </ion-col>
       <ion-col class="col-border">
           <div *ngIf="ios; then iosMap else googleMap"></div>
-          <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
-          <ng-template #googleMap><a button href="http://maps.google.com?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+          <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item[0].latitude}},{{item[0].longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+          <ng-template #googleMap><a button href="http://maps.google.com?q={{item[0].latitude}},{{item[0].longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
           <!-- <button ion-button color="light" clear small icon-start center class="override-button" (click)="startExternalMap()">
               <div class="center"><ion-icon name='pin'></ion-icon><span class="col-text">1.7 mi</span></div>
           </button> -->

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { Searchbar } from 'ionic-angular';
+import { Searchbar, App } from 'ionic-angular';
 import { IonicPage, NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
-import {HttpModule, Headers, RequestOptions, Response} from '@angular/http'
+import {Headers, RequestOptions} from '@angular/http'
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
@@ -12,6 +12,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import firebase from 'firebase';
+import { MainPage } from '../pages';
+import { EventPage } from '../event/event';
 
 @IonicPage()
 @Component({
@@ -41,7 +43,15 @@ export class CardsPage {
 
   baseUrl: string = 'https://yourunity.org';
 
-  constructor(public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
+  constructor(public app: App, public navCtrl: NavController, public http: Http, public storage: Storage, public platform: Platform, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation) {
+    
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.userLat = resp.coords.latitude;
+      this.userLong = resp.coords.longitude;
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+    
     if (this.platform.is('ios')) {
       this.ios = true;
     }
@@ -52,6 +62,17 @@ export class CardsPage {
 
   ionViewDidLoad() {
     this.pullEvents();
+    
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.userLat = resp.coords.latitude;
+      this.userLong = resp.coords.longitude;
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+  }
+
+  goToWelcome() {
+    this.navCtrl.setRoot(MainPage);
   }
 
   pullEvents() {
@@ -59,23 +80,8 @@ export class CardsPage {
       this.cardItems = data;
       console.log(this.cardItems);
 
-      this.geolocation.getCurrentPosition().then((resp) => {
-        this.userLat = resp.coords.latitude;
-        this.userLong = resp.coords.longitude;
-       }).catch((error) => {
-         console.log('Error getting location', error);
-       });
-
       for(var i = 0; i < this.cardItems.length; i++) {
         var item = this.cardItems[i];
-        this.storage.get(item.id.toString()).then((val) => {
-          if(val) {
-            this.setRegister(item, false);
-          }
-          else {
-            this.setRegister(item, true);
-          }      
-        }); 
       }
 
       this.calculateCoords(this.cardItems);
@@ -89,7 +95,7 @@ export class CardsPage {
     for(var i = 0; i < this.cardItems.length; i++) {
       var item = this.cardItems[i];
 
-      item.distance = this.calculateDistance(this.userLat, item.latitude, this.userLong, item.longitude);
+      item.distance = this.calculateDistance(this.userLat, item[0].latitude, this.userLong, item[0].longitude);
     }
   }
 
@@ -102,77 +108,22 @@ export class CardsPage {
     return dis;
   }
 
-  register(item) {
-    var user_id = firebase.auth().currentUser.uid;
-    var url = this.baseUrl + '/api/register_event';
-    var data = {
-      "event_id" : item.id,
-      "firedb_id" : user_id,
-      "check_in_time" : 0,
-      "duration" : 0,
-      "activity_status" : 2
-    };
-
-    let headers = new Headers ({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers }); 
-
-    // Check in user on server
-    this.http.post(url, JSON.stringify(data), options)
-    .map(res => res.json())
-    .subscribe(data =>
-      console.log(data)
-    );
-
-    console.log("Registration completed");
-
-    item.isRegister = false;
-
-    this.storage.set(item.id.toString(), "registered");
-  }
+  
 
   openEvent(item) {
-    this.storage.get(item.id.toString()).then((val) => {
-      if(val) {
-        item.isRegister = false;
-      }
-      else {
-        item.isRegister = true;
-      }      
-    }); 
-
-    item.eventOpened = !item.eventOpened;
-    this.eventOpened = !this.eventOpened;
-
-    console.log();
-    console.log(item.latitude);
-    console.log(item.longitude);
-  }
-
-  isOpened() {
-    return this.eventOpened;
-  }
-
-  isCardOpened(item) {
-    return item.eventOpened;
-  }
-
-  canRegister(item) {
-    return item.isRegister;
+    this.navCtrl.push(EventPage, {
+      eventDetails: item
+    });
   }
 
   doRefresh(refresher) {
+    this.eventOpened = false;
     this.pullEvents();
 
     setTimeout(() => {
       console.log('Async operation has ended');
       refresher.complete();
     }, 700);
-  }
-
-  private setRegister(item, isIt) {
-    console.log("Function called on ID " + item.id + ", isRegistered = " + isIt);
-    item.isRegister = isIt;
-    console.log(item.isRegister);
   }
 
   getEvents(event) {
@@ -201,23 +152,7 @@ export class CardsPage {
 
     this.searchbar.clearInput(null);
 
-    this.http.get(this.baseUrl + '/api/events').map(res => res.json()).subscribe(data => {
-      this.cardItems = data;
-      
-      for(var i = 0; i < this.cardItems.length; i++) {
-        var item = this.cardItems[i];
-        this.storage.get(item.id.toString()).then((val) => {
-          if(val) {
-            this.setRegister(item, false);
-          }
-          else {
-            this.setRegister(item, true);
-          }      
-        }); 
-      }
-
-      this.calculateCoords(this.cardItems);
-    });
+    this.pullEvents();
   }
 
   isSearched() {

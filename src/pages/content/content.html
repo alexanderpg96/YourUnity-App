@@ -78,8 +78,8 @@
         </ion-col>
         <ion-col class="col-border">
           <div *ngIf="ios; then iosMap else googleMap"></div>
-            <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
-            <ng-template #googleMap><a button href="http://maps.google.com?q={{item.latitude}},{{item.longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+            <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item[0].latitude}},{{item[0].longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+            <ng-template #googleMap><a button href="http://maps.google.com?q={{item[0].latitude}},{{item[0].longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
             <!-- <button ion-button color="light" clear small icon-start center class="override-button">
               <div class="center"><ion-icon name='pin'></ion-icon><span class="col-text">1.7 mi</span></div>
             </button> -->

@@ -9,6 +9,7 @@ import { Settings } from '../providers/providers';
 
 import firebase from 'firebase';
 import { TabsPage } from '../pages/tabs/tabs';
+import { WelcomePage } from '../pages/welcome/welcome';
 
 @Component({
   template: `<ion-menu [content]="content">
@@ -31,6 +32,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 })
 export class MyApp {
   rootPage = FirstRunPage;
+  loggedIn: Boolean = false;
 
   @ViewChild(Nav) nav: Nav;
 
@@ -47,15 +49,18 @@ export class MyApp {
     { title: 'Settings', component: 'SettingsPage' },
     { title: 'Event Detail', component: 'EventDetailPage' },
     { title: 'Your Events', component: 'YourCardsPage' },
-    { title: 'Search', component: 'SearchPage' }
+    { title: 'Search', component: 'SearchPage' },
+    { title: 'Event', component: 'EventPage' }
   ]
 
   constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleBlackTranslucent();
+      this.statusBar.overlaysWebView(true);
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
+      console.log("app started");
     });
     this.initTranslate();
 
@@ -83,11 +88,5 @@ export class MyApp {
     this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
       this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
     });
-  }
-
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
   }
 }

@@ -3,11 +3,66 @@
 
 
 <ion-content>
-  <!-- <button ion-button (click)="startExternalMap()">Open in Maps</button> -->
-  <div *ngIf="ios; then iosMap else googleMap"></div>
+  <h2 class="page-title">{{ this.item.event_name }}</h2>
 
-  <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{latitude}},{{longitude}}">{{distance}} mi</a></ng-template>
-  <ng-template #googleMap><a button href="http://maps.google.com?q={{latitude}},{{longitude}}">Google Map</a></ng-template>
+  <p class="date">{{ item.starts * 1000 | date:'MMM d, yyyy' }}</p>
+  <p class="time">{{item.starts * 1000 | date:'h:mm a'}} - {{item.ends * 1000 | date:'h:mm a'}}</p>
+
+  <div class="registerOverlay">
+
+    <div *ngIf="item.type_id === 1"><img src="assets/img/animals.jpg" /></div>
+    <div *ngIf="item.type_id === 2"><img src="assets/img/education.jpg" /></div>
+    <div *ngIf="item.type_id === 3"><img src="assets/img/aging.jpg" /></div>
+    <div *ngIf="item.type_id === 4"><img src="assets/img/environment.jpg" /></div>
+    <div *ngIf="item.type_id === 5"><img src="assets/img/food.jpg" /></div>
+    <div *ngIf="item.type_id === 6"><img src="assets/img/homeless.jpg" /></div>
+    <div *ngIf="item.type_id === 7"><img src="assets/img/humanities.jpg" /></div>
+    <div *ngIf="item.type_id === 8"><img src="assets/img/government.jpg" /></div>
+    <div *ngIf="item.type_id === 9"><img src="assets/img/museum.jpg" /></div>
+    <div *ngIf="item.type_id === 10"><img src="assets/img/technology.jpg" /></div>
+    <div *ngIf="item.type_id === 11"><img src="assets/img/youth.jpg" /></div>
+    <div *ngIf="item.type_id === 12"><img src="assets/img/yourunity.jpg" /></div>
+
+    <button ion-button outline class="registerButton" [ngClass]="{activeButton: canRegister(item)}" 
+    (click)="register(item)" 
+    [disabled]="!canRegister(item)">Register</button>
+
+  </div>
+
+  <p [innerHTML]="item.event_description"></p>
+
+  <ion-row>
+    <ion-col class="col-border">
+      <button ion-button color="light" clear small icon-start class="override-button">
+          <div *ngIf="item.type_id === 1"><ion-icon name='paw'></ion-icon></div>
+          <div *ngIf="item.type_id === 2"><ion-icon name='school'></ion-icon></div>
+          <div *ngIf="item.type_id === 3"><ion-icon name='glasses'></ion-icon></div>
+          <div *ngIf="item.type_id === 4"><ion-icon name='leaf'></ion-icon></div>
+          <div *ngIf="item.type_id === 5"><ion-icon name='restaurant'></ion-icon></div>
+          <div *ngIf="item.type_id === 6"><ion-icon name='home'></ion-icon></div>
+          <div *ngIf="item.type_id === 7"><ion-icon name='body'></ion-icon></div>
+          <div *ngIf="item.type_id === 8"><ion-icon name='people'></ion-icon></div>
+          <div *ngIf="item.type_id === 9"><ion-icon name='brush'></ion-icon></div>
+          <div *ngIf="item.type_id === 10"><ion-icon name='laptop'></ion-icon></div>
+          <div *ngIf="item.type_id === 11"><ion-icon name='happy'></ion-icon></div>
+          <div *ngIf="item.type_id === 12"><ion-icon name='list-box'></ion-icon></div>
+        </button>
+    </ion-col>
+    <ion-col class="col-border">
+      <button ion-button color="light" clear small icon-start center class="override-button">
+          <!-- <ion-icon name='text'></ion-icon> -->
+          <div class="center"><ion-icon name='calendar'></ion-icon><span class="col-text">{{item.starts * 1000 | date:'dd MMM'}}</span></div>
+        </button>
+    </ion-col>
+    <ion-col class="col-border">
+        <div *ngIf="ios; then iosMap else googleMap"></div>
+        <ng-template #iosMap><a button href="http://maps.apple.com/maps?q={{item[0].latitude}},{{item[0].longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+        <ng-template #googleMap><a button href="http://maps.google.com?q={{item[0].latitude}},{{item[0].longitude}}"><div class="center center-vert"><ion-icon name='pin'></ion-icon><span class="col-text"> {{ item.distance }} mi</span></div></a></ng-template>
+        <!-- <button ion-button color="light" clear small icon-start center class="override-button" (click)="startExternalMap()">
+            <div class="center"><ion-icon name='pin'></ion-icon><span class="col-text">1.7 mi</span></div>
+        </button> -->
+    </ion-col>
+  </ion-row>
   
 </ion-content>
 

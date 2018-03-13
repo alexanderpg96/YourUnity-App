@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
@@ -17,18 +18,32 @@ export class LoginPage {
   // If you're using the username field with or without email, make
   // sure to add it to the type
   account: { email: string, password: string } = {
-    email: 'test@example.com',
-    password: 'test'
+    email: '',
+    password: ''
   };
 
   // Our translated text strings
   private loginErrorString: string;
+  keyboardShow: Boolean = true;
 
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService, private keyboard: Keyboard) {
 
+      keyboard.disableScroll(true);
+
+      keyboard.onKeyboardShow()
+      .subscribe(data => {
+        this.keyboardShow = false;
+       //your code goes here
+    });
+
+    keyboard.onKeyboardHide()
+      .subscribe(data => {
+        this.keyboardShow = true;
+       //your code goes here
+    });
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
     })
@@ -50,7 +65,8 @@ export class LoginPage {
         alert('Please enter a password.');
         return;
       }
-      firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         if (errorCode === 'auth/wrong-password') {
