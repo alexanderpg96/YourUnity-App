@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.yourunity.YourUnity" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.yourunity.YourUnity" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>YourUnity</name>
     <description>Community, everywhere.</description>
     <author email="contact@yourunity.org" href="https://yourunity.org/">YourUnity</author>
