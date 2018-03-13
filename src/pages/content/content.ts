@@ -67,7 +67,11 @@ export class ContentPage {
       this.time = this.dataItems[this.dataItems.length-1];
 
       for(var i = 0; i < this.dataItems.length - 2; i++) {
-        this.cardItems.push(this.dataItems[i]);
+        // TEMP FIX UNTIL API UPDATED
+        // Add event to array as long as the event hasn't already passed
+        if(this.dataItems[i].time_state > 0) {
+          this.cardItems.push(this.dataItems[i]);
+        }
       }
       
       for(var i = 0; i < this.cardItems.length; i++) {
@@ -77,16 +81,15 @@ export class ContentPage {
         // if statement to check if time has started and check status (1 = event started, 2 = not started)
         if(item.starts <= Math.round((new Date()).getTime() / 1000) && item.ends >= Math.round((new Date()).getTime() / 1000)) {
           var key = item.id.toString() + "_check";
+          var temp_item = item;
           this.storage.get(key).then((val) => {
             if(val) {
-              console.log("id: " + item.id + ", checkin turned off");
-              this.setIn(item, false);
-              this.setOut(item, true);
+              this.setIn(temp_item, false);
+              this.setOut(temp_item, true);
             }
             else {
-              console.log("id: " + item.id + ", checkin turned on");
-              this.setIn(item, true);
-              this.setOut(item, false);
+              this.setIn(temp_item, true);
+              this.setOut(temp_item, false);
             }      
           });      
         }
@@ -99,9 +102,6 @@ export class ContentPage {
       }
 
       this.time = Math.round( ((this.time)/3600) * 10 ) / 10;
-
-      console.log(this.cardItems);
-      console.log(this.user.uid);
     });
   }
 
@@ -135,19 +135,15 @@ export class ContentPage {
     this.pullEvents();
 
     setTimeout(() => {
-      console.log('Async operation has ended');
       refresher.complete();
     }, 700);
   }
 
   toggle(item) {
-    console.log(item.id);
     item.opened = !item.opened;
   }
 
   setIn(item, isIt) {
-    console.log("in");
-    console.log(isIt);
     item.isInEnabled = isIt;
   }
 
@@ -168,7 +164,7 @@ export class ContentPage {
   }
 
   checkIn(item) {
-    if(item.distance < 0.2) {
+    // Removed location radius!!!
       var user_id = this.user.uid;
       var url = this.baseUrl + '/api/check';
       var checkinTime = Math.round((new Date()).getTime() / 1000)
@@ -188,22 +184,16 @@ export class ContentPage {
         console.log(data)
       );
 
-      console.log("Checked in");
-
       item.isInEnabled = false;
       item.isOutEnabled = true;
 
       var key = item.id.toString() + "_check";
       this.storage.set(key, checkinTime);
       this.storage.get(key).then((val) => {console.log(val)});
-    }
-    else {
-      alert("You are not close enough to the event. Please move closer.")
-    }
   }
 
   checkOut(item) {
-    if(item.distance < 0.2) {
+    // Removed location radius!!!
       var key = item.id.toString() + "_check";
       var duration = Math.round((new Date()).getTime() / 1000);
 
@@ -227,9 +217,6 @@ export class ContentPage {
           console.log(data)
         );
 
-        console.log("Checked out");
-        console.log(data);
-
         item.isInEnabled = false;
         item.isOutEnabled = false;
 
@@ -247,10 +234,6 @@ export class ContentPage {
       
       var key = item.id.toString() + "_check";
       this.storage.remove(key);
-    }
-    else {
-      alert("You are not close enough to the event. Please move closer.")
-    }
   }
 
 }
